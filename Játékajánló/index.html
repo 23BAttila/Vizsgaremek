@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Játék Ajánló</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-icon">☰</div>
+        <nav class="sidebar-menu">
+            <a href="#"><span>Kezdőlap</span></a>
+            <a href="#"><span>Böngészés</span></a>
+            <a href="#"><span>Kategóriák</span></a>
+            <a href="#"><span>Kedvencek</span></a>
+            <a href="#"><span>Beállítások</span></a>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <header>
+            <button class="login-btn">bejelentkezés</button>
+            <h1>Játék ajánló</h1>
+            <div class="search-container">
+                <span class="label-hint">textbox 3</span>
+                <input type="text" placeholder="Játék neve" class="search-box">
+            </div>
+        </header>
+
+        <section class="filter-section">
+            <div class="tag-inputs">
+                <div class="input-group">
+                    <span class="label-hint">textbox 1</span>
+                    <input type="text" placeholder="filterek amik legyenek">
+                </div>
+                <div class="input-group">
+                    <span class="label-hint">textbox 2</span>
+                    <input type="text" placeholder="filterek amik ne legyenek">
+                </div>
+            </div>
+
+            <div class="sliders-container">
+                <div class="slider-group">
+                    <div class="slider-labels">
+                        <span>nem híres</span>
+                        <span>híres</span>
+                    </div>
+                    <input type="range" min="0" max="100" class="custom-slider">
+                </div>
+                <div class="slider-group">
+                    <div class="slider-labels">
+                        <span>régi</span>
+                        <span>új</span>
+                    </div>
+                    <input type="range" min="0" max="100" class="custom-slider">
+                </div>
+            </div>
+        </section>
+
+        <section class="game-list">
+            
+            <div class="game-card">
+                <div class="game-img-placeholder">KÉP HELYE</div>
+                <div class="game-info">
+                    <h3>JÁTÉK NEVE</h3>
+                    <p class="release-date">RELEASED ON JAN 01, 2024</p>
+                    <div class="tags">
+                        <span class="tag">#akció</span>
+                        <span class="tag">#kaland</span>
+                        <span class="tag">#multiplayer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-img-placeholder">KÉP HELYE</div>
+                <div class="game-info">
+                    <h3>JÁTÉK NEVE</h3>
+                    <p class="release-date">RELEASED ON DEC 15, 2023</p>
+                    <div class="tags">
+                        <span class="tag">#rpg</span>
+                        <span class="tag">#singleplayer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-img-placeholder">KÉP HELYE</div>
+                <div class="game-info"><h3>JÁTÉK NEVE</h3><p class="release-date">RELEASED ON...</p></div>
+            </div>
+            <div class="game-card">
+                <div class="game-img-placeholder">KÉP HELYE</div>
+                <div class="game-info"><h3>JÁTÉK NEVE</h3><p class="release-date">RELEASED ON...</p></div>
+            </div>
+
+        </section>
+    </main>
+
+</body>
+</html>
