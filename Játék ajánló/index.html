@@ -3,56 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Játék Ajánló</title>
+    <title>GameHunt</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <div id="category-panel" class="category-drawer">
+        <div class="drawer-header">
+            <h3>Kategóriák</h3>
+            <button id="close-drawer">&times;</button>
+        </div>
+        <ul class="category-list">
+            <li><a href="#">Akció</a></li>
+            <li><a href="#">RPG</a></li>
+            <li><a href="#">Horror</a></li>
+            <li><a href="#">Szimulátor</a></li>
+            <li><a href="#">Indie</a></li>
+            <li><a href="#">FPS</a></li>
+            <li><a href="#">Stratégia</a></li>
+        </ul>
+    </div>
+
     <div class="sidebar">
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
-            <a href="#"><span>Kezdőlap</span></a>
-            <a href="#"><span>Böngészés</span></a>
-            <a href="#"><span>Kategóriák</span></a>
+            <a href="index.html"><span>Kezdőlap</span></a>
+            <a href="#search-target"><span>Böngészés</span></a>
+            <a href="javascript:void(0)" id="open-categories"><span>Kategóriák</span></a>
             <a href="#"><span>Kedvencek</span></a>
-            <a href="#"><span>Beállítások</span></a>
         </nav>
     </div>
 
     <main class="main-content">
+        <div class="top-bar">
+            <button class="login-btn">Bejelentkezés</button>
+        </div>
+
         <header>
-            <button class="login-btn">bejelentkezés</button>
-            <h1>Játék ajánló</h1>
-            <div class="search-container">
-                <span class="label-hint">textbox 3</span>
-                <input type="text" placeholder="Játék neve" class="search-box">
+            <h1>GameHunt</h1>
+            <div class="search-container" id="search-target">
+                <input type="text" placeholder="Keress rá egy játékra..." class="search-box">
             </div>
         </header>
 
         <section class="filter-section">
             <div class="tag-inputs">
                 <div class="input-group">
-                    <span class="label-hint">textbox 1</span>
-                    <input type="text" placeholder="filterek amik legyenek">
+                    <input type="text" placeholder="Milyen kategóriák legyenek?">
                 </div>
                 <div class="input-group">
-                    <span class="label-hint">textbox 2</span>
-                    <input type="text" placeholder="filterek amik ne legyenek">
+                    <input type="text" placeholder="Miket zárjunk ki?">
                 </div>
             </div>
 
             <div class="sliders-container">
                 <div class="slider-group">
                     <div class="slider-labels">
-                        <span>nem híres</span>
-                        <span>híres</span>
+                        <span>Kevésbé híres</span>
+                        <span>Népszerű</span>
                     </div>
                     <input type="range" min="0" max="100" class="custom-slider">
                 </div>
                 <div class="slider-group">
                     <div class="slider-labels">
-                        <span>régi</span>
-                        <span>új</span>
+                        <span>Klasszikus</span>
+                        <span>Új megjelenés</span>
                     </div>
                     <input type="range" min="0" max="100" class="custom-slider">
                 </div>
@@ -60,43 +75,33 @@
         </section>
 
         <section class="game-list">
-            
             <div class="game-card">
-                <div class="game-img-placeholder">KÉP HELYE</div>
+                <div class="game-img-placeholder">JÁTÉK KÉPE</div>
                 <div class="game-info">
-                    <h3>JÁTÉK NEVE</h3>
-                    <p class="release-date">RELEASED ON JAN 01, 2024</p>
+                    <h3>Példa Játék</h3>
+                    <p class="release-date">Megjelenés: 2024. 02. 19.</p>
                     <div class="tags">
                         <span class="tag">#akció</span>
-                        <span class="tag">#kaland</span>
-                        <span class="tag">#multiplayer</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-img-placeholder">KÉP HELYE</div>
-                <div class="game-info">
-                    <h3>JÁTÉK NEVE</h3>
-                    <p class="release-date">RELEASED ON DEC 15, 2023</p>
-                    <div class="tags">
                         <span class="tag">#rpg</span>
-                        <span class="tag">#singleplayer</span>
                     </div>
                 </div>
             </div>
-
-            <div class="game-card">
-                <div class="game-img-placeholder">KÉP HELYE</div>
-                <div class="game-info"><h3>JÁTÉK NEVE</h3><p class="release-date">RELEASED ON...</p></div>
-            </div>
-            <div class="game-card">
-                <div class="game-img-placeholder">KÉP HELYE</div>
-                <div class="game-info"><h3>JÁTÉK NEVE</h3><p class="release-date">RELEASED ON...</p></div>
-            </div>
-
         </section>
     </main>
 
+    <script>
+        const drawer = document.getElementById('category-panel');
+        const openBtn = document.getElementById('open-categories');
+        const closeBtn = document.getElementById('close-drawer');
+
+        openBtn.onclick = () => drawer.classList.add('open');
+        closeBtn.onclick = () => drawer.classList.remove('open');
+
+        window.onclick = (event) => {
+            if (event.target == drawer) {
+                drawer.classList.remove('open');
+            }
+        }
+    </script>
 </body>
 </html>
