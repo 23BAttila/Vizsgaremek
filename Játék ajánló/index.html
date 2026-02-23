@@ -21,6 +21,9 @@
             <li><a href="#">Indie</a></li>
             <li><a href="#">FPS</a></li>
             <li><a href="#">Stratégia</a></li>
+            <li><a href="#">Sport</a></li>
+            <li><a href="#">Kaland</a></li>
+            <li><a href="#">Verseny</a></li>
         </ul>
     </div>
 
@@ -34,11 +37,9 @@
         </nav>
     </div>
 
-    <main class="main-content">
-        <div class="top-bar">
-            <button class="login-btn">Bejelentkezés</button>
-        </div>
+    <button class="login-btn-fixed">Bejelentkezés</button>
 
+    <main class="main-content">
         <header>
             <h1>GameHunt</h1>
             <div class="search-container" id="search-target">
@@ -48,28 +49,17 @@
 
         <section class="filter-section">
             <div class="tag-inputs">
-                <div class="input-group">
-                    <input type="text" placeholder="Milyen kategóriák legyenek?">
-                </div>
-                <div class="input-group">
-                    <input type="text" placeholder="Miket zárjunk ki?">
-                </div>
+                <div class="input-group"><input type="text" placeholder="Milyen kategóriák legyenek?"></div>
+                <div class="input-group"><input type="text" placeholder="Miket zárjunk ki?"></div>
             </div>
-
             <div class="sliders-container">
                 <div class="slider-group">
-                    <div class="slider-labels">
-                        <span>Kevésbé híres</span>
-                        <span>Népszerű</span>
-                    </div>
-                    <input type="range" min="0" max="100" class="custom-slider">
+                    <div class="slider-labels"><span>Kevésbé híres</span><span>Népszerű</span></div>
+                    <input type="range" class="custom-slider">
                 </div>
                 <div class="slider-group">
-                    <div class="slider-labels">
-                        <span>Klasszikus</span>
-                        <span>Új megjelenés</span>
-                    </div>
-                    <input type="range" min="0" max="100" class="custom-slider">
+                    <div class="slider-labels"><span>Klasszikus</span><span>Új megjelenés</span></div>
+                    <input type="range" class="custom-slider">
                 </div>
             </div>
         </section>
@@ -83,6 +73,8 @@
                     <div class="tags">
                         <span class="tag">#akció</span>
                         <span class="tag">#rpg</span>
+                        <span class="tag">#multiplayer</span>
+                        <span class="tag">#túlélő</span>
                     </div>
                 </div>
             </div>
@@ -94,13 +86,11 @@
         const openBtn = document.getElementById('open-categories');
         const closeBtn = document.getElementById('close-drawer');
 
-        openBtn.onclick = () => drawer.classList.add('open');
-        closeBtn.onclick = () => drawer.classList.remove('open');
+        openBtn.addEventListener('click', () => drawer.classList.add('open'));
+        closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
 
         window.onclick = (event) => {
-            if (event.target == drawer) {
-                drawer.classList.remove('open');
-            }
+            if (event.target === drawer) drawer.classList.remove('open');
         }
     </script>
 </body>
