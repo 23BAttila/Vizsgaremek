@@ -1,14 +1,15 @@
 {
   "name": "jatek-ajanlo",
   "version": "1.0.0",
-  "description": "Interactive game recommender and search engine using IGDB API",
-  "keywords": [],
+  "description": "Gamehunt interactive recommendation system",
+  "main": "server.js",
   "license": "ISC",
-  "author": "",
   "type": "commonjs",
-  "main": "gameapi.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "dependencies": {
     "cors": "^2.8.6",
