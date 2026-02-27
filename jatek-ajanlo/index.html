@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="category-panel" class="category-drawer">
         <div class="drawer-header">
             <h3>Kategóriák</h3>
             <button id="close-drawer">&times;</button>
         </div>
         <ul class="category-list">
-            <li><a href="#">Akció</a></li>
+            <li><a alt="filter-teszt" href="#" onclick="filterGenre(4)">Akció</a></li>
             <li><a href="#">RPG</a></li>
             <li><a href="#">Horror</a></li>
             <li><a href="#">Szimulátor</a></li>
@@ -26,10 +25,10 @@
             <li><a href="#">Verseny</a></li>
         </ul>
     </div>
-
     <div class="sidebar">
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
+            <a style="font-size: 24px;" href="index.html"><h1>GameHunt</h1></a>
             <a href="index.html"><span>Kezdőlap</span></a>
             <a href="#search-target"><span>Böngészés</span></a>
             <a href="javascript:void(0)" id="open-categories"><span>Kategóriák</span></a>
@@ -37,28 +36,27 @@
         </nav>
     </div>
 
-    <button class="login-btn-fixed">Bejelentkezés</button>
-
+    <button class="login-btn-fixed">Login</button>
     <main class="main-content">
         <header>
-            <h1>GameHunt</h1>
             <div class="search-container" id="search-target">
-                <input type="text" placeholder="Keress rá egy játékra..." class="search-box">
+                <input type="text" placeholder="Search for any GAME or MOD..." class="search-box">
             </div>
         </header>
 
         <section class="filter-section">
             <div class="tag-inputs">
-                <div class="input-group"><input type="text" placeholder="Milyen kategóriák legyenek?"></div>
-                <div class="input-group"><input type="text" placeholder="Miket zárjunk ki?"></div>
+                
+                <div class="input-group"><input type="text" placeholder="Adding filters..."></div>
+                <div class="input-group"><input type="text" placeholder="Blocking filters..."></div>
             </div>
             <div class="sliders-container">
                 <div class="slider-group">
-                    <div class="slider-labels"><span>Kevésbé híres</span><span>Népszerű</span></div>
+                    <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
                     <input type="range" class="custom-slider">
                 </div>
                 <div class="slider-group">
-                    <div class="slider-labels"><span>Klasszikus</span><span>Új megjelenés</span></div>
+                    <div class="slider-labels"><span>Older</span><span>Newer</span></div>
                     <input type="range" class="custom-slider">
                 </div>
             </div>
@@ -69,7 +67,7 @@
                 <div class="game-img-placeholder">JÁTÉK KÉPE</div>
                 <div class="game-info">
                     <h3>Példa Játék</h3>
-                    <p class="release-date">Megjelenés: 2024. 02. 19.</p>
+                    <p class="release-date">Release date: 2024. 02. 19.</p>
                     <div class="tags">
                         <span class="tag">#akció</span>
                         <span class="tag">#rpg</span>
@@ -93,5 +91,6 @@
             if (event.target === drawer) drawer.classList.remove('open');
         }
     </script>
+    <script src="gameapi.js"></script>
 </body>
 </html>

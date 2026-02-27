@@ -1,11 +1,12 @@
 :root {
-    --bg-dark: #0a0b0d;
-    --sidebar-bg: #14161a;
+    --bg-dark: #17191d;
+    --sidebar-bg: #1e2124;
     --card-bg: #1a1d23;
     --panel-bg: #1e2229;
-    --accent-blue: #00d2ff;
+    --accent-blue: #ffffff;
     --text-white: #ffffff;
-    --text-gray: #a0a0a0;
+    --text-gray: #bdbdbd;
+    --gamecard-border: #ffffff;
 }
 
 * { box-sizing: border-box; }
@@ -25,22 +26,22 @@ body {
     background: transparent; border: 1px solid var(--accent-blue);
     color: var(--accent-blue); padding: 10px 24px; border-radius: 20px;
     cursor: pointer; font-weight: 600; text-transform: uppercase;
-    font-size: 11px; transition: 0.3s;
+    font-size: 14px; transition: 0.3s;
 }
-.login-btn-fixed:hover { background: var(--accent-blue); color: black; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
+.login-btn-fixed:hover { background: var(--accent-blue); color: black; box-shadow: 0 0 20px rgb(95, 95, 95); }
 
 
 .sidebar {
     width: 60px; height: 100vh; background-color: var(--sidebar-bg);
-    position: fixed; left: 0; top: 0; transition: width 0.3s ease;
+    position: fixed; left: 0; top: 0; transition: width 0.2s ease-out;
     overflow: hidden; display: flex; flex-direction: column;
-    border-right: 1px solid #222; z-index: 1000;
+    border-right: 1px solid #222; z-index: 2; 
 }
-.sidebar:hover { width: 200px; }
-.sidebar-icon { min-width: 60px; padding: 20px 0; text-align: center; font-size: 24px; color: var(--accent-blue); }
+.sidebar:hover { width: 360px;}
+.sidebar-icon { min-width: 60px; padding: 20px 0; text-align: center; font-size: 24px; color: white; user-select: none; }
 .sidebar-menu a {
     display: flex; align-items: center; color: #888; text-decoration: none;
-    height: 50px; padding-left: 20px; white-space: nowrap;
+    height: 48px; padding-left: 16px; white-space: nowrap;
     opacity: 0; visibility: hidden; transition: 0.2s;
 }
 .sidebar:hover .sidebar-menu a { opacity: 1; visibility: visible; }
@@ -49,7 +50,7 @@ body {
 .category-drawer {
     position: fixed; top: 0; right: -320px;
     width: 320px; height: 100vh; background-color: var(--sidebar-bg);
-    box-shadow: -10px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease;
+    box-shadow: -10px 0 30px rgba(255, 255, 255, 0.267); transition: right 0.4s ease;
     z-index: 2000; padding: 30px; border-left: 2px solid var(--accent-blue);
 }
 .category-drawer.open { right: 0; }
@@ -57,23 +58,22 @@ body {
 #close-drawer { background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
 
 .category-list { 
+    font-size: 12px;
     list-style: none; padding: 0; 
     display: flex; flex-wrap: wrap; 
-    gap: 16px; 
+    gap: 10px; 
 }
 .category-list a {
-    color: #aaa; text-decoration: none; font-size: 12px;
-    background: rgba(255,255,255,0.05); padding: 10px 18px;
-    border-radius: 20px; border: 1px solid #333; transition: 0.2s;
-    display: inline-block;
+    color: #b8b8b8; text-decoration: none; font-size: 12px;
+    padding: 5px 5px;
 }
-.category-list a:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(0, 210, 255, 0.05); }
+.category-list a:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(69, 150, 168, 0.05); }
 
 .main-content { margin-left: 60px; flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px; }
 header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; margin-bottom: 40px; }
-h1 { font-size: 60px; margin: 0; background: linear-gradient(to bottom, #fff, #444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.search-box { width: 100%; max-width: 450px; padding: 15px; background: #1a1d23; border: 1px solid #333; color: white; border-radius: 30px; text-align: center; margin-top: 20px; outline: none; transition: 0.3s; }
-.search-box:focus { border-color: var(--accent-blue); }
+h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.search-box {text-align: right; width: 100%; max-width: 250px; padding: 10px; background: #1a1d23; border: 1px solid #333; color: white; border-radius: 40px; text-align: left; margin-top: 0px; outline: none; transition: 0.5s;}
+.search-box:focus { border-color: var(--accent-blue); max-width: 500px}
 
 .filter-section {
     background-color: var(--panel-bg); width: 100%; max-width: 800px;
@@ -92,18 +92,22 @@ h1 { font-size: 60px; margin: 0; background: linear-gradient(to bottom, #fff, #4
     -webkit-appearance: none; width: 100%; height: 8px; background: #111; border-radius: 10px; outline: none; border: 1px solid #333;
 }
 .custom-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 22px; height: 22px; background: var(--accent-blue); border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--accent-blue); transition: 0.2s;
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; transition: 0.2s;
 }
 .custom-slider::-moz-range-thumb {
-    width: 22px; height: 22px; background: var(--accent-blue); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 0 10px var(--accent-blue);
+    width: 22px; height: 22px; background: var(--accent-blue); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 0 2px var(--accent-blue);
 }
 .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
 
 .game-list { width: 100%; max-width: 800px; }
-.game-card { display: flex; background: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 15px; border-bottom: 4px solid var(--accent-blue); transition: 0.3s; }
-.game-card:hover { transform: translateY(-5px); }
-.game-img-placeholder { width: 180px; height: 100px; background: #111; margin-right: 25px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; border-radius: 8px; flex-shrink: 0; }
-
+.game-card { display: flex;
+  background: var(--card-bg);
+  padding: 12px;
+  border-bottom: 4px solid white;
+  transition: 0.3s;}
+.game-card:hover { transform: translateY(-15px); box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); background-color: #a5a3aa; } /*a képről a legjobban előforduló szín beállítása box-shadow/background-color-ba*/
+.game-img-placeholder { width: 180px; height: 100px; background: #111; margin-right: 25px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; border-radius: 12px; flex-shrink: 0; }
+.game-info {padding-left: 20px;}
 
 .tags { 
     display: flex; 

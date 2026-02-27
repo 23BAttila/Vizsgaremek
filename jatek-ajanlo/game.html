@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-details"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        fetch(`http://localhost:3000/game/${id}`)
+            .then(res => res.json())
+            .then(game => {
+
+                const release = game.first_release_date
+                    ? new Date(game.first_release_date * 1000).toLocaleDateString()
+                    : "Ismeretlen";
+
+                const imageUrl = game.cover
+                    ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
+                    : "";
+
+                document.getElementById("game-details").innerHTML = `
+                    <h1>${game.name}</h1>
+                    <img src="${imageUrl}">
+                    <p><strong>Megjelenés:</strong> ${release}</p>
+                    <p><strong>Értékelés:</strong> ${game.rating ? game.rating.toFixed(1) : "N/A"}</p>
+                    <p><strong>Műfaj:</strong> ${game.genres?.map(g => g.name).join(", ")}</p>
+                    <p><strong>Leírás:</strong> ${game.summary || "Nincs leírás."}</p>
+                `;
+            });
+    </script>
+</body>
+</html>
