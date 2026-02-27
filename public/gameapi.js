@@ -5,9 +5,7 @@ searchBox.addEventListener("keypress", async (e) => {
     if (e.key === "Enter") {
         const query = searchBox.value;
 
-        const response = await fetch(
-            `http://localhost:3000/games?search=${query}`
-        );
+        const response = await fetch(`/games?search=${encodeURIComponent(query)}`);
 
         const games = await response.json();
         //TRELLO(JSTD-001-2)
@@ -52,7 +50,7 @@ function openGame(id) {
     window.location.href = `game.html?id=${id}`;
 }
 function filterGenre(id) {
-    fetch(`http://localhost:3000/games?genre=${id}`)
+    fetch(`/games?genre=${id}`)
         .then(res => res.json())
         .then(displayGames);
 }
