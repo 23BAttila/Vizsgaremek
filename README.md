@@ -26,3 +26,8 @@ Ezek alapján fog frissülni a felhasználó ízlése szerint webalkalmazás
 A projekt letöltve ID/SECRET/TOKEN ismerése nélkül nem futtatható
 Ezeket az információkat https://api-docs.igdb.com/?#getting-started oldalon követve tudhatóak meg.
 !!!
+
+Ha a szerver el van indítva ezen az URL-en található meg: 
+https://vizsgaremek-1kus.onrender.com
+Ehhez nem kell az ID, Secret vagy Token.
+Saját futtatásra a mappa gyökerében ahol a server.js található CMD-t megnyitva "node server.js" paranccsal indítható el és a kijelzett "localhost:port"-on érhető el.
