@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHunt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="category-panel" class="category-drawer">
+        <div class="drawer-header">
+            <h3>Kategóriák</h3>
+            <button id="close-drawer">&times;</button>
+        </div>
+        <ul class="category-list">
+            <li><a alt="filter-teszt" href="#" onclick="filterGenre(4)">Akció</a></li>
+            <li><a href="#">RPG</a></li>
+            <li><a href="#">Horror</a></li>
+            <li><a href="#">Szimulátor</a></li>
+            <li><a href="#">Indie</a></li>
+            <li><a href="#">FPS</a></li>
+            <li><a href="#">Stratégia</a></li>
+            <li><a href="#">Sport</a></li>
+            <li><a href="#">Kaland</a></li>
+            <li><a href="#">Verseny</a></li>
+        </ul>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-icon">☰</div>
+        <nav class="sidebar-menu">
+            <a style="font-size: 24px;" href="index.html"><h1>GameHunt</h1></a>
+            <a href="index.html"><span>Kezdőlap</span></a>
+            <a href="#search-target"><span>Böngészés</span></a>
+            <a href="javascript:void(0)" id="open-categories"><span>Kategóriák</span></a>
+            <a href="#"><span>Kedvencek</span></a>
+        </nav>
+    </div>
+
+    <button class="login-btn-fixed">Login</button>
+    <main class="main-content">
+        <header>
+            <div class="search-container" id="search-target">
+                <input type="text" placeholder="Search for any GAME or MOD..." class="search-box">
+            </div>
+        </header>
+
+        <section class="filter-section">
+            <div class="tag-inputs">
+                
+                <div class="input-group"><input type="text" placeholder="Adding filters..."></div>
+                <div class="input-group"><input type="text" placeholder="Blocking filters..."></div>
+            </div>
+            <div class="sliders-container">
+                <div class="slider-group">
+                    <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
+                    <input type="range" class="custom-slider">
+                </div>
+                <div class="slider-group">
+                    <div class="slider-labels"><span>Older</span><span>Newer</span></div>
+                    <input type="range" class="custom-slider">
+                </div>
+            </div>
+        </section>
+
+        <section class="game-list">
+            <div class="game-card">
+                <div class="game-img-placeholder">JÁTÉK KÉPE</div>
+                <div class="game-info">
+                    <h3>Példa Játék</h3>
+                    <p class="release-date">Release date: 2024. 02. 19.</p>
+                    <div class="tags">
+                        <span class="tag">#akció</span>
+                        <span class="tag">#rpg</span>
+                        <span class="tag">#multiplayer</span>
+                        <span class="tag">#túlélő</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="login-modal" class="modal-overlay">
+    <div class="modal-content">
+        <button id="close-login" class="close-modal">&times;</button>
+        <h2>Bejelentkezés</h2>
+        <form>
+            <input type="text" placeholder="Felhasználónév" class="modal-input">
+            <input type="password" placeholder="Jelszó" class="modal-input">
+            <button type="submit" class="login-submit">Belépés</button>
+        </form>
+    </div>
+</div>
+    <script>
+        const drawer = document.getElementById('category-panel');
+        const openBtn = document.getElementById('open-categories');
+        const closeBtn = document.getElementById('close-drawer');
+
+        openBtn.addEventListener('click', () => drawer.classList.add('open'));
+        closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
+
+        window.onclick = (event) => {
+            if (event.target === drawer) drawer.classList.remove('open');
+        }
+    const loginBtn = document.querySelector('.login-btn-fixed');
+    const loginModal = document.getElementById('login-modal');
+    const closeLogin = document.getElementById('close-login');
+        
+    loginBtn.addEventListener('click', () => {
+        loginModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeLogin.addEventListener('click', () => {
+        loginModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+    
+    window.addEventListener('click', (event) => {
+        if (event.target === loginModal) {
+            loginModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+    </script>
+    <script src="gameapi.js"></script>
+
+</body>
+</html>
