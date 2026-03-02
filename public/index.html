@@ -78,7 +78,17 @@
             </div>
         </section>
     </main>
-
+    <div id="login-modal" class="modal-overlay">
+    <div class="modal-content">
+        <button id="close-login" class="close-modal">&times;</button>
+        <h2>Bejelentkezés</h2>
+        <form>
+            <input type="text" placeholder="Felhasználónév" class="modal-input">
+            <input type="password" placeholder="Jelszó" class="modal-input">
+            <button type="submit" class="login-submit">Belépés</button>
+        </form>
+    </div>
+</div>
     <script>
         const drawer = document.getElementById('category-panel');
         const openBtn = document.getElementById('open-categories');
@@ -90,7 +100,28 @@
         window.onclick = (event) => {
             if (event.target === drawer) drawer.classList.remove('open');
         }
+    const loginBtn = document.querySelector('.login-btn-fixed');
+    const loginModal = document.getElementById('login-modal');
+    const closeLogin = document.getElementById('close-login');
+        
+    loginBtn.addEventListener('click', () => {
+        loginModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeLogin.addEventListener('click', () => {
+        loginModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+    
+    window.addEventListener('click', (event) => {
+        if (event.target === loginModal) {
+            loginModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
     </script>
     <script src="gameapi.js"></script>
+
 </body>
 </html>

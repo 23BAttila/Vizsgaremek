@@ -30,7 +30,6 @@ body {
 }
 .login-btn-fixed:hover { background: var(--accent-blue); color: black; box-shadow: 0 0 20px rgb(95, 95, 95); }
 
-
 .sidebar {
     width: 60px; height: 100vh; background-color: var(--sidebar-bg);
     position: fixed; left: 0; top: 0; transition: width 0.2s ease-out;
@@ -72,6 +71,7 @@ body {
 .main-content { margin-left: 60px; flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px; }
 header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; margin-bottom: 40px; }
 h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
 .search-box {text-align: right; width: 100%; max-width: 250px; padding: 10px; background: #1a1d23; border: 1px solid #333; color: white; border-radius: 40px; text-align: left; margin-top: 0px; outline: none; transition: 0.5s;}
 .search-box:focus { border-color: var(--accent-blue); max-width: 500px}
 
@@ -89,13 +89,34 @@ h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: t
 .slider-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-gray); margin-bottom: 12px; }
 
 .custom-slider {
-    -webkit-appearance: none; width: 100%; height: 8px; background: #111; border-radius: 10px; outline: none; border: 1px solid #333;
+    -webkit-appearance: none; 
+    width: 100%; 
+    height: 8px; 
+    background: #111; 
+    border-radius: 10px; 
+    outline: none; 
+    border: 1px solid #333;
 }
+
 .custom-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; transition: 0.2s;
+    -webkit-appearance: none; 
+    width: 22px; 
+    height: 22px; 
+    background: var(--accent-blue); 
+    border-radius: 50%; 
+    cursor: pointer; 
+    transition: 0.2s;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
+
 .custom-slider::-moz-range-thumb {
-    width: 22px; height: 22px; background: var(--accent-blue); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 0 2px var(--accent-blue);
+    width: 22px; 
+    height: 22px; 
+    background: var(--accent-blue); 
+    border-radius: 50%; 
+    cursor: pointer; 
+    border: none; 
+    box-shadow: 0 0 2px var(--accent-blue);
 }
 .custom-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
 
@@ -105,7 +126,7 @@ h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: t
   padding: 12px;
   border-bottom: 4px solid white;
   transition: 0.3s;}
-.game-card:hover { transform: translateY(-15px); box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); background-color: #a5a3aa; } /*a képről a legjobban előforduló szín beállítása box-shadow/background-color-ba*/
+.game-card:hover { transform: translateY(-15px); box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); background-color: #a5a3aa; }
 .game-img-placeholder { width: 180px; height: 100px; background: #111; margin-right: 25px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; border-radius: 12px; flex-shrink: 0; }
 .game-info {padding-left: 20px;}
 
@@ -117,3 +138,69 @@ h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: t
 }
 .tag { color: var(--accent-blue); font-size: 13px; font-weight: 600; cursor: pointer; transition: color 0.2s; }
 .tag:hover { color: white; text-decoration: none; }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; 
+    backdrop-filter: blur(8px); 
+    transition: all 0.3s ease;
+}
+
+
+.modal-overlay.active {
+    display: flex;
+}
+
+
+.modal-content {
+    background: var(--panel-bg);
+    padding: 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    border: 1px solid #444;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+    text-align: center;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #14161a;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 8px;
+}
+
+.login-submit {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-blue);
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
