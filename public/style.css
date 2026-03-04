@@ -81,7 +81,7 @@ body {
 header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; margin-bottom: 40px; }
 h1 { font-size: 42px; margin: 0; background: #ffffff; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-.search-box {text-align: right; width: 100%; max-width: 250px; padding: 10px; background: #1a1d23; border: 1px solid #333; color: white; border-radius: 40px; text-align: left; margin-top: 0px; outline: none; transition: 0.5s;}
+.search-box { width: 100%; max-width: 250px; padding: 10px; background: #1a1d23; border: 1px solid #333; color: white; border-radius: 40px; text-align: left; margin-top: 0px; outline: none; transition: 0.5s;}
 .search-box:focus { border-color: var(--accent-blue); max-width: 550px}
 .search-box:focus-visible { background-color: rgb(255, 255, 255); color: black; padding-left: 20px; box-shadow: 0 0 10px var(--accent-blue); font-weight: 900;}
 

@@ -18,6 +18,38 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+const users = [];
+
+app.post("/api/register", (req, res) => {
+  const { email, username, password } = req.body;
+  
+  if (!email || !username || !password) {
+      return res.status(400).json({ error: "Minden mező kitöltése kötelező!" });
+  }
+
+  const userExists = users.find(u => u.username === username || u.email === email);
+  if (userExists) {
+      return res.status(400).json({ error: "Ez a felhasználónév vagy e-mail már foglalt!" });
+  }
+
+  users.push({ email, username, password }); 
+  res.status(201).json({ message: "Sikeres regisztráció!" });
+});
+
+app.post("/api/login", (req, res) => {
+  const { identifier, password } = req.body;
+
+  const user = users.find(u => 
+      (u.username === identifier || u.email === identifier) && u.password === password
+  );
+
+  if (!user) {
+      return res.status(401).json({ error: "Hibás felhasználónév/e-mail vagy jelszó!" });
+  }
+
+  res.json({ message: "Sikeres bejelentkezés!", username: user.username });
+});
+
 let accessToken = "";
 
 async function getAccessToken() {
@@ -95,5 +127,5 @@ app.get("/game/:id", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Gyors tesztelésre: http://localhost:${PORT} (!!!Nem tudom hogy a serveren ha fut akkor localhoston használható-e a kereső!!!)`);
+  console.log(`Gyors tesztelésre: http://localhost:${PORT}`);
 });
