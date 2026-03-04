@@ -95,5 +95,5 @@ app.get("/game/:id", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Gyors tesztelésre: http://localhost:${PORT} (!!!Nem tudom hogy a serveren ha fut akkor localhoston használható-e a kereső!!!)`);
 });

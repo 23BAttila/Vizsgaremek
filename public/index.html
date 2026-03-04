@@ -52,6 +52,7 @@
             </div>
             <div class="sliders-container">
                 <div class="slider-group">
+                    <!-- slider akadjon-->
                     <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
                     <input type="range" class="custom-slider">
                 </div>
@@ -61,8 +62,8 @@
                 </div>
             </div>
         </section>
-
-        <section class="game-list">
+        <section class="game-list"><!-- alert hivatkozas erre a classra megy ne vedd ki-->
+            <!-- 
             <div class="game-card">
                 <div class="game-img-placeholder">JÁTÉK KÉPE</div>
                 <div class="game-info">
@@ -76,17 +77,21 @@
                     </div>
                 </div>
             </div>
+            -->
         </section>
     </main>
+    <!-- WBTD: "register button pipa/ a gyors tesztelési css-eket írd már át a .css-be, és ha megvan ezt töröld ki pls"-->
     <div id="login-modal" class="modal-overlay">
     <div class="modal-content">
         <button id="close-login" class="close-modal">&times;</button>
-        <h2>Bejelentkezés</h2>
+        <h2 style="font-size: 32px; font-weight:100;"><!-- L()gin -->Login</h2>
         <form>
-            <input type="text" placeholder="Felhasználónév" class="modal-input">
-            <input type="password" placeholder="Jelszó" class="modal-input">
-            <button type="submit" class="login-submit">Belépés</button>
+            <input type="text" placeholder="Username/Email" class="modal-input">
+            <input type="password" placeholder="Password" class="modal-input">
+            <button type="submit" class="login-submit">Login</button>
+            <button type="button" class="login-submit" style="color: white; background: #252a3300; border: 1px solid var(--accent-blue);">Register</button>
         </form>
+
     </div>
 </div>
     <script>
