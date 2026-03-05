@@ -63,6 +63,7 @@ async function getAccessToken() {
 }
 
 app.get("/games", async (req, res) => {
+  //JSTD-007-2
   try {
     if (!accessToken) await getAccessToken();
 

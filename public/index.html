@@ -28,15 +28,22 @@
     <div class="sidebar">
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
-            <a style="font-size: 24px;" href="index.html"><h1>GameHunt</h1></a>
+            <a style="font-size: 24px;" href="index.html"><h1 class="h1-title">GameHunt</h1></a>
             <a href="index.html"><span>Kezdőlap</span></a>
             <a href="#search-target"><span>Böngészés</span></a>
             <a href="javascript:void(0)" id="open-categories"><span>Kategóriák</span></a>
             <a href="#"><span>Kedvencek</span></a>
         </nav>
     </div>
+<div class="top-right-controls">
+        <button class="login-btn-fixed">Login</button>
+        <button class="theme-toggle" id="theme-toggle-btn">
+            <img src="assets/brightness.png" alt="Light Mode" class="theme-icon" id="light-mode-icon">
+            <img src="assets/white_moon-stars.png" alt="Dark Mode" class="theme-icon" id="dark-mode-icon">
+        </button>
+</div>
 
-    <button class="login-btn-fixed">Login</button>
+
     <main class="main-content">
         <header>
             <div class="search-container" id="search-target">
@@ -74,7 +81,7 @@
                     <input type="text" placeholder="Username / Email" class="modal-input" required>
                     <input type="password" placeholder="Password" class="modal-input" required>
                     <button type="submit" class="login-submit">Login</button>
-                    <button type="button" id="btn-to-register" class="login-submit" style="color: white; background: #252a3300; border: 1px solid var(--accent-blue);">Register</button>
+                    <p><button type="button" id="btn-to-register" style="color: rgb(75, 75, 196); cursor: pointer; border: none;">Register</button></p>
                 </form>
             </div>
 
@@ -93,5 +100,6 @@
 
     <script src="user.js"></script>
     <script src="gameapi.js"></script>
+    <script src="theme.js"></script>
 </body>
 </html>

@@ -60,7 +60,8 @@ window.addEventListener('click', (event) => {
         drawer.classList.remove('open');
     }
 });
-
+const popup_good = document.createElement('div');
+const popup_bad = document.createElement('div');
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -79,15 +80,31 @@ if (loginForm) {
             const data = await response.json();
 
             if (response.ok) {
-                alert(`Sikeres bejelentkezés! Üdv, ${data.username}!`);
+                
+                document.querySelector('.success-popup')?.remove();
+                popup_good.textContent = `Sikeres bejelentkezés! Üdv, ${data.username}!`;                
+                popup_good.classList.add('success-popup');
+                document.body.appendChild(popup_good);
+                setTimeout(() => {
+                    popup_good.remove();
+                }, 6000);
                 closeModal();
                 loginBtn.textContent = data.username;
             } else {
-                alert(`Sikertelen bejelentkezés: ${data.error}`);
+                //alert(`Sikertelen bejelentkezés: ${data.error}`);
+                popup_bad.textContent = `Sikertelen bejelentkezés: ${data.error}`;
+                popup_bad.classList.add('error-popup');
+                document.body.appendChild(popup_bad);
+                setTimeout(() => {
+                    popup_bad.remove();
+                }, 6000);
+                closeModal();
+
             }
         } catch (error) {
-            console.error('Hiba:', error);
-            alert('Hálózati hiba történt.');
+            //JSTD-009-1
+           console.error('Error:', error);
+            alert(`Something went wrong: ${error}`);
         }
     });
 }
@@ -111,15 +128,31 @@ if (registerForm) {
             const data = await response.json();
 
             if (response.ok) {
-                alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
-                btnToLogin.click();
-                e.target.reset(); 
+                document.querySelector('.success-popup')?.remove();
+                //JSE-002-3
+                
+                if (response.ok) {
+                    document.querySelector('.success-popup')?.remove();
+                    popup_good.textContent = `Sikeres regisztráció! Üdv, ${data.username || username}!`;
+                    popup_good.classList.add('success-popup');
+                    document.body.appendChild(popup_good);
+                    setTimeout(() => { popup_good.remove(); }, 6000);
+                    closeModal();
+                    btnToLogin.click();
+                    e.target.reset();
+                }
             } else {
-                alert(`Sikertelen regisztráció: ${data.error}`);
+                popup_bad.textContent = `Sikertelen regisztráció: ${data.error}`;
+                popup_bad.classList.add('error-popup');
+                document.body.appendChild(popup_bad);
+                setTimeout(() => {
+                    popup_bad.remove();
+                }, 6000);
+                closeModal();
             }
         } catch (error) {
-            console.error('Hiba:', error);
-            alert('Hálózati hiba történt.');
+            console.error('Error:', error);
+            alert(`Something went wrong: ${error}`);
         }
     });
 }
