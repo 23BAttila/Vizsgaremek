@@ -170,7 +170,7 @@ header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; ma
   padding: 12px;
   border-bottom: 4px solid white;
   transition: 0.3s;}
-.game-card:hover { transform: translateY(-15px); box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); background-color: var(--text-gray); color: var(--gamecard-border);}
+.game-card:hover { transform: translateY(-15px); box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); background-color: var(--bg-dark); color: var(--accent-blue-two);}
 .game-img-placeholder { width: 180px; height: 100px; background: #111; margin-right: 25px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; border-radius: 12px; flex-shrink: 0; }
 .game-info {padding-left: 20px;}
 
