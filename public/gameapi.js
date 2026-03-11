@@ -187,16 +187,21 @@ function displayGames(games) {
             ? `https:${game.cover.url.replace("t_thumb", "t_cover_big")}`
             : "https://placehold.co/264x352?text=No%0AImage%0AFound";
 
+        const safeName = game.name.replace(/'/g, "\\'");
+
         gameList.innerHTML += `
             <div class="game-card">
-                <img src="${imageUrl}" alt="${game.name}">
-                <div class="game-info">
-                    <h3>${game.name}</h3>
+                <img src="${imageUrl}" alt="${game.name}" class="game-img-placeholder" style="background: none;">
+                <div class="game-info" style="width: 100%;">
+                    <h3>
+                        ${game.name}
+                        <span class="fav-star" onclick="toggleFavorite(${game.id}, '${safeName}', '${imageUrl}', this)">☆</span>
+                    </h3>
                     <p class="release-date">Release date: ${releaseDate}</p>
                     <div class="tags">
                         ${game.genres ? game.genres.map(g => `<span class="tag" onclick="filterGenre(${g.id})">${g.name}</span>`).join("") : ""}
                     </div>
-                    <button class="details-btn" onclick="openGame(${game.id})">Details</button>
+                    <button class="details-btn" onclick="openGame(${game.id})" style="margin-top: 20px;">Details</button>
                 </div>
             </div>
         `;
@@ -215,7 +220,6 @@ function loadGenres() {
             span.textContent = genre.name;
             span.onclick = () => filterByCategory(genre.id, genre.name);
             categoryList.appendChild(span);
-            //console.log(genre.name); //debug
         });
     })
     .catch(err => console.error("Sorry, Failed to load a genre or any genres:", err));
@@ -224,7 +228,8 @@ function loadGenres() {
 loadGenres();
 
 function openGame(id) {
-    openGameModal(id);
+    if(typeof openGameModal === 'function') openGameModal(id);
+    else window.location.href = `game.html?id=${id}`;
 }
 function filterGenre(id) {
     clearAllFilters();
@@ -238,7 +243,6 @@ function filterGenre(id) {
     });
 }
 
-
 function clearAllFilters() {
     addFilters = [];
     blockFilters = [];
@@ -247,4 +251,59 @@ function clearAllFilters() {
     if (popularitySlider) popularitySlider.value = 50;
     if (dateSlider) dateSlider.value = 50;
     renderFilterTags();
+}
+
+async function toggleFavorite(id, name, coverUrl, starElement) {
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (!currentUser) {
+        alert("A kedvencekhez adáshoz be kell jelentkezned!");
+        document.getElementById('login-modal').classList.add('active');
+        return;
+    }
+
+    const response = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            username: currentUser, 
+            game: { id: id, name: name, coverUrl: coverUrl } 
+        })
+    });
+
+    const data = await response.json();
+
+    if (data.isFavorite) {
+        starElement.innerHTML = '★';
+        starElement.classList.add('active');
+    } else {
+        starElement.innerHTML = '☆';
+        starElement.classList.remove('active');
+    }
+}
+
+function displayFavorites(games) {
+    gameList.innerHTML = `<h2 style="margin-bottom: 20px;">Mentett Kedvencek</h2>`;
+
+    if (games.length === 0) {
+        gameList.innerHTML += `<p>Még nem mentettél el egyetlen játékot sem.</p>`;
+        return;
+    }
+
+    games.forEach(game => {
+        const safeName = game.name.replace(/'/g, "\\'");
+
+        gameList.innerHTML += `
+            <div class="game-card">
+                <img src="${game.coverUrl}" alt="${game.name}" class="game-img-placeholder" style="background: none;">
+                <div class="game-info" style="width: 100%;">
+                    <h3>
+                        ${game.name}
+                        <span class="fav-star active" onclick="toggleFavorite(${game.id}, '${safeName}', '${game.coverUrl}', this); this.parentElement.parentElement.parentElement.remove();">★</span>
+                    </h3>
+                    <button class="details-btn" onclick="openGame(${game.id})" style="margin-top: 20px;">Details</button>
+                </div>
+            </div>
+        `;
+    });
 }

@@ -25,6 +25,15 @@ const btnToLogin = document.getElementById('btn-to-login');
 
 let isLoggedIn = false;
 
+document.addEventListener("DOMContentLoaded", () => {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser && loginBtn) {
+        loginBtn.textContent = currentUser;
+        isLoggedIn = true;
+        if (userDropdownName) userDropdownName.textContent = currentUser;
+    }
+});
+
 if (loginBtn && loginModal) {
     loginBtn.addEventListener('click', () => {
         if (isLoggedIn) {
@@ -43,10 +52,12 @@ document.addEventListener('click', (e) => {
 
 if (dropdownLogout) {
     dropdownLogout.addEventListener('click', () => {
+        localStorage.removeItem('currentUser'); 
         isLoggedIn = false;
         loginBtn.textContent = 'Login';
         userDropdown.classList.remove('open');
         if (userDropdownName) userDropdownName.textContent = '';
+        location.reload(); 
     });
 }
 
@@ -83,9 +94,11 @@ window.addEventListener('click', (event) => {
         drawer.classList.remove('open');
     }
 });
+
 const popup_good = document.createElement('div');
 const popup_bad = document.createElement('div');
 const loginForm = document.getElementById('login-form');
+
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
@@ -108,6 +121,8 @@ if (loginForm) {
                 popup_good.textContent = `Logged in successfully! Welcome, ${data.username}!`;                
                 document.body.appendChild(popup_good);
                 setTimeout(() => { popup_good.remove(); }, 6000);
+                
+                localStorage.setItem('currentUser', data.username);
                 closeModal();
                 isLoggedIn = true;
                 loginBtn.textContent = data.username;
@@ -167,6 +182,27 @@ if (registerForm) {
         } catch (error) {
             console.error('Error:', error);
             alert(`Something went wrong: ${error}`);
+        }
+    });
+}
+
+const favoritesLink = document.getElementById('favorites-link');
+if (favoritesLink) {
+    favoritesLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            alert("A kedvencekhez be kell jelentkezned!");
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            return;
+        }
+        try {
+            const response = await fetch(`/api/favorites/${currentUser}`);
+            const favGames = await response.json();
+            if(typeof displayFavorites === 'function') displayFavorites(favGames);
+        } catch (error) { 
+            console.error("Hiba a kedvencek betöltésekor:", error); 
         }
     });
 }

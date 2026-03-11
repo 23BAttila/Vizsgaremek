@@ -32,7 +32,7 @@ app.post("/api/register", (req, res) => {
       return res.status(400).json({ error: "This username or email is already taken!" });
   }
 
-  users.push({ email, username, password }); 
+  users.push({ email, username, password, favorites: [] }); 
   res.status(201).json({ message: "Registration successful!" });
 });
 
@@ -48,6 +48,27 @@ app.post("/api/login", (req, res) => {
   }
 
   res.json({ message: "Logged in successfully!", username: user.username });
+});
+
+app.get("/api/favorites/:username", (req, res) => {
+    const user = users.find(u => u.username === req.params.username);
+    if (!user) return res.status(404).json({ error: "User not found!" });
+    res.json(user.favorites);
+});
+
+app.post("/api/favorites", (req, res) => {
+    const { username, game } = req.body;
+    const user = users.find(u => u.username === username);
+    if (!user) return res.status(401).json({ error: "Not logged in!" });
+
+    const existingIndex = user.favorites.findIndex(f => f.id === game.id);
+    if (existingIndex > -1) {
+        user.favorites.splice(existingIndex, 1);
+        res.json({ message: "Removed from favorites", isFavorite: false });
+    } else {
+        user.favorites.push(game);
+        res.json({ message: "Added to favorites", isFavorite: true });
+    }
 });
 
 let accessToken = "";
@@ -160,7 +181,6 @@ app.get("/genres", async (req, res) => {
     res.status(500).json({ error: "Hiba történt" });
   }
 });
-//TO-DO Admin panel/Admin bejelentkezés 
 
 
 const PORT = process.env.PORT || 3000;

@@ -251,8 +251,8 @@ header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; ma
 .login-submit {
     width: 100%;
     padding: 12px;
-     background: var(--theme-based-bg);
-      color: var(--based-on-theme);
+    background: var(--theme-based-bg);
+    color: var(--based-on-theme);
     border: none;
     border-radius: 8px;
     font-weight: bold;
@@ -447,7 +447,6 @@ header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; ma
     height:auto;
 }
 
-/* ── Image modal carousel ── */
 .image-modal-layer {
     z-index: 5000 !important;
     display: none;
@@ -517,7 +516,6 @@ header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; ma
 }
 .image-modal-close:hover { color: red; }
 
-/* ── User dropdown ── */
 .user-menu-wrapper {
     position: relative;
 }
@@ -572,3 +570,18 @@ header { width: 100%; max-width: 800px; text-align: center; margin-top: 50px; ma
 .user-dropdown-item:hover { background: rgba(255,255,255,0.08); }
 #dropdown-logout:hover { color: #ff6b6b; }
 
+.fav-star {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--based-on-theme);
+    transition: 0.2s;
+    user-select: none;
+    float: right;
+}
+.fav-star:hover {
+    transform: scale(1.2);
+}
+.fav-star.active {
+    color: gold;
+    text-shadow: 0 0 10px gold;
+}
