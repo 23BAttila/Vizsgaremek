@@ -24,16 +24,16 @@ app.post("/api/register", (req, res) => {
   const { email, username, password } = req.body;
   
   if (!email || !username || !password) {
-      return res.status(400).json({ error: "Minden mező kitöltése kötelező!" });
+      return res.status(400).json({ error: "All fields are required!" });
   }
 
   const userExists = users.find(u => u.username === username || u.email === email);
   if (userExists) {
-      return res.status(400).json({ error: "Ez a felhasználónév vagy e-mail már foglalt!" });
+      return res.status(400).json({ error: "This username or email is already taken!" });
   }
 
   users.push({ email, username, password }); 
-  res.status(201).json({ message: "Sikeres regisztráció!" });
+  res.status(201).json({ message: "Registration successful!" });
 });
 
 app.post("/api/login", (req, res) => {
@@ -44,10 +44,10 @@ app.post("/api/login", (req, res) => {
   );
 
   if (!user) {
-      return res.status(401).json({ error: "Hibás felhasználónév/e-mail vagy jelszó!" });
+      return res.status(401).json({ error: "Invalid username/email or password!" });
   }
 
-  res.json({ message: "Sikeres bejelentkezés!", username: user.username });
+  res.json({ message: "Logged in successfully!", username: user.username });
 });
 
 let accessToken = "";
@@ -69,8 +69,21 @@ app.get("/games", async (req, res) => {
 
     const search = req.query.search || "";
     const genre = req.query.genre || "";
+    const sortBy = req.query.sortBy || "";
+    const sortOrder = req.query.sortOrder || "desc";
 
-    const genreFilter = genre ? `where genres = (${genre});` : "";
+    const conditions = [];
+    if (genre) conditions.push(`genres = (${genre})`);
+    if (sortBy === "rating") conditions.push("rating != null");
+    if (sortBy === "first_release_date") conditions.push("first_release_date != null");
+
+    const whereClause = conditions.length ? `where ${conditions.join(" & ")};` : "";
+    const sortClause = sortBy ? `sort ${sortBy} ${sortOrder};` : "";
+    const searchClause = search && !sortBy ? `search "${search}";` : "";
+    const nameFilter = search && sortBy ? `name ~ *"${search}"*` : "";
+    if (nameFilter) conditions.push(nameFilter);
+
+    const finalWhere = conditions.length ? `where ${conditions.join(" & ")};` : whereClause;
 
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
@@ -80,8 +93,9 @@ app.get("/games", async (req, res) => {
         "Content-Type": "text/plain"
       },
       body: `
-        search "${search}";
-        ${genreFilter}
+        ${searchClause}
+        ${finalWhere}
+        ${sortClause}
         fields name,summary,first_release_date,genres.name,rating,cover.url;
         limit 20;
       `
@@ -125,6 +139,29 @@ app.get("/game/:id", async (req, res) => {
     res.status(500).json({ error: "Hiba történt" });
   }
 });
+app.get("/genres", async (req, res) => {
+  try {
+    if (!accessToken) await getAccessToken();
+
+    const response = await fetch("https://api.igdb.com/v4/genres", {
+      method: "POST",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "text/plain"
+      },
+      body: `fields name; limit 50;`
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Hiba történt" });
+  }
+});
+//TO-DO Admin panel/Admin bejelentkezés 
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {

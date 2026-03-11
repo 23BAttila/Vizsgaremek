@@ -14,16 +14,39 @@ if (openBtn && drawer && closeBtnDrawer) {
 const loginBtn = document.querySelector('.login-btn-fixed');
 const loginModal = document.getElementById('login-modal');
 const closeLoginBtn = document.getElementById('close-login');
+const userDropdown = document.getElementById('user-dropdown');
+const userDropdownName = document.getElementById('user-dropdown-name');
+const dropdownLogout = document.getElementById('dropdown-logout');
 
 const loginFormContainer = document.getElementById('login-form-container');
 const registerFormContainer = document.getElementById('register-form-container');
 const btnToRegister = document.getElementById('btn-to-register');
 const btnToLogin = document.getElementById('btn-to-login');
 
+let isLoggedIn = false;
+
 if (loginBtn && loginModal) {
     loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        if (isLoggedIn) {
+            userDropdown.classList.toggle('open');
+        } else {
+            loginModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+}
+document.addEventListener('click', (e) => {
+    if (userDropdown && !userDropdown.contains(e.target) && e.target !== loginBtn) {
+        userDropdown.classList.remove('open');
+    }
+});
+
+if (dropdownLogout) {
+    dropdownLogout.addEventListener('click', () => {
+        isLoggedIn = false;
+        loginBtn.textContent = 'Login';
+        userDropdown.classList.remove('open');
+        if (userDropdownName) userDropdownName.textContent = '';
     });
 }
 
@@ -80,26 +103,23 @@ if (loginForm) {
             const data = await response.json();
 
             if (response.ok) {
-                
                 document.querySelector('.success-popup')?.remove();
-                popup_good.textContent = `Sikeres bejelentkezés! Üdv, ${data.username}!`;                
-                popup_good.classList.add('success-popup');
+                popup_good.className = 'success-popup';
+                popup_good.textContent = `Logged in successfully! Welcome, ${data.username}!`;                
                 document.body.appendChild(popup_good);
-                setTimeout(() => {
-                    popup_good.remove();
-                }, 6000);
+                setTimeout(() => { popup_good.remove(); }, 6000);
                 closeModal();
+                isLoggedIn = true;
                 loginBtn.textContent = data.username;
+                if (userDropdownName) userDropdownName.textContent = data.username;
             } else {
-                //alert(`Sikertelen bejelentkezés: ${data.error}`);
-                popup_bad.textContent = `Sikertelen bejelentkezés: ${data.error}`;
-                popup_bad.classList.add('error-popup');
+                popup_bad.className = 'error-popup';
+                popup_bad.textContent = `Logged in failed: ${data.error}`;
                 document.body.appendChild(popup_bad);
                 setTimeout(() => {
                     popup_bad.remove();
                 }, 6000);
                 closeModal();
-
             }
         } catch (error) {
             //JSTD-009-1
@@ -128,22 +148,16 @@ if (registerForm) {
             const data = await response.json();
 
             if (response.ok) {
-                document.querySelector('.success-popup')?.remove();
-                //JSE-002-3
-                
-                if (response.ok) {
-                    document.querySelector('.success-popup')?.remove();
-                    popup_good.textContent = `Sikeres regisztráció! Üdv, ${data.username || username}!`;
-                    popup_good.classList.add('success-popup');
+                    popup_good.className = 'success-popup';
+                    popup_good.textContent = `Registration successful! Welcome, ${data.username || username}!`;
                     document.body.appendChild(popup_good);
                     setTimeout(() => { popup_good.remove(); }, 6000);
                     closeModal();
                     btnToLogin.click();
                     e.target.reset();
-                }
             } else {
-                popup_bad.textContent = `Sikertelen regisztráció: ${data.error}`;
-                popup_bad.classList.add('error-popup');
+                popup_bad.className = 'error-popup';
+                popup_bad.textContent = `Registration failed: ${data.error}`;
                 document.body.appendChild(popup_bad);
                 setTimeout(() => {
                     popup_bad.remove();

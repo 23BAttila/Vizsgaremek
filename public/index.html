@@ -5,38 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameHunt</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
-    <div id="category-panel" class="category-drawer">
-        <div class="drawer-header">
-            <h3>Kategóriák</h3>
-            <button id="close-drawer">&times;</button>
-        </div>
-        <ul class="category-list">
-            <li><a alt="filter-teszt" href="#" onclick="filterGenre(4)">Akció</a></li>
-            <li><a href="#">RPG</a></li>
-            <li><a href="#">Horror</a></li>
-            <li><a href="#">Szimulátor</a></li>
-            <li><a href="#">Indie</a></li>
-            <li><a href="#">FPS</a></li>
-            <li><a href="#">Stratégia</a></li>
-            <li><a href="#">Sport</a></li>
-            <li><a href="#">Kaland</a></li>
-            <li><a href="#">Verseny</a></li>
-        </ul>
+<div id="category-panel" class="category-drawer">
+    <div class="drawer-header">
+        <h3>Categories</h3>
+        <button id="close-drawer">&times;</button>
     </div>
+    <div class="category-list">
+
+    </div>
+</div>
     <div class="sidebar">
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
             <a style="font-size: 24px;" href="index.html"><h1 class="h1-title">GameHunt</h1></a>
-            <a href="index.html"><span>Kezdőlap</span></a>
-            <a href="#search-target"><span>Böngészés</span></a>
-            <a href="javascript:void(0)" id="open-categories"><span>Kategóriák</span></a>
-            <a href="#"><span>Kedvencek</span></a>
+            <a href="index.html"><span>Home</span></a>
+            <a href="#search-target"><span>Search</span></a>
+            <a href="javascript:void(0)" id="open-categories"><span>Categories</span></a>
+            <a href="#"><span>Favorites</span></a>
         </nav>
     </div>
 <div class="top-right-controls">
-        <button class="login-btn-fixed">Login</button>
+        <div class="user-menu-wrapper">
+            <button class="login-btn-fixed">Login</button>
+            <div id="user-dropdown" class="user-dropdown">
+                <div class="user-dropdown-name" id="user-dropdown-name"></div>
+                <hr class="user-dropdown-divider">
+                <button class="user-dropdown-item" id="dropdown-logout">Log Out</button>
+            </div>
+        </div>
         <button class="theme-toggle" id="theme-toggle-btn">
             <img src="assets/brightness.png" alt="Light Mode" class="theme-icon" id="light-mode-icon">
             <img src="assets/white_moon-stars.png" alt="Dark Mode" class="theme-icon" id="dark-mode-icon">
@@ -57,9 +56,11 @@
                 <div class="input-group"><input type="text" placeholder="Blocking filters..."></div>
             </div>
             <div class="sliders-container">
+                
                 <div class="slider-group">
                     <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
                     <input type="range" class="custom-slider">
+
                 </div>
                 <div class="slider-group">
                     <div class="slider-labels"><span>Older</span><span>Newer</span></div>
@@ -67,9 +68,25 @@
                 </div>
             </div>
         </section>
-        <section class="game-list">
+        <section class="game-list" id="game-list">
         </section>
     </main>
+    <div id="image-modal" class="modal-overlay image-modal-layer">
+        <button id="close-image-modal" class="close-modal image-modal-close">&times;</button>
+        <button id="prev-screenshot" class="screenshot-nav-btn" aria-label="Previous">&#8249;</button>
+        <div class="image-modal-center">
+            <div id="screenshot-counter" class="screenshot-counter"></div>
+            <img id="modal-image" src="" alt="Screenshot">
+        </div>
+        <button id="next-screenshot" class="screenshot-nav-btn" aria-label="Next">&#8250;</button>
+    </div>
+    <div id="game-details-modal" class="modal-overlay">
+        <div class="modal-content game-details-content">
+            <button id="close-game-details" class="close-modal">&times;</button>
+            <div  id="game-details-body">
+            </div>
+        </div>
+    </div>
 
     <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
@@ -97,9 +114,9 @@
             </div>
         </div>
     </div>
-
     <script src="user.js"></script>
     <script src="gameapi.js"></script>
     <script src="theme.js"></script>
+    <script src="game_details.js"></script>
 </body>
 </html>
