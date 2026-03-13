@@ -8,26 +8,23 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
-<div id="category-panel" class="category-drawer">
-    <div class="drawer-header">
-        <h3>Categories</h3>
-        <button id="close-drawer">&times;</button>
+    <div id="category-panel" class="category-drawer">
+        <div class="drawer-header">
+            <h3>Categories</h3>
+            <button id="close-drawer">&times;</button>
+        </div>
+        <div class="category-list"></div>
     </div>
-    <div class="category-list">
-
-    </div>
-</div>
     <div class="sidebar">
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
-            <a style="font-size: 24px;" href="index.html"><h1 class="h1-title">GameHunt</h1></a>
             <a href="index.html"><span>Home</span></a>
             <a href="#search-target"><span>Search</span></a>
             <a href="javascript:void(0)" id="open-categories"><span>Categories</span></a>
             <a href="#" id="favorites-link"><span>Favorites</span></a>
         </nav>
     </div>
-<div class="top-right-controls">
+    <div class="top-right-controls">
         <div class="user-menu-wrapper">
             <button class="login-btn-fixed">Login</button>
             <div id="user-dropdown" class="user-dropdown">
@@ -40,13 +37,18 @@
             <img src="assets/brightness.png" alt="Light Mode" class="theme-icon" id="light-mode-icon">
             <img src="assets/white_moon-stars.png" alt="Dark Mode" class="theme-icon" id="dark-mode-icon">
         </button>
-</div>
-
+    </div>
 
     <main class="main-content">
+        <div class="gamehunt-logo-container">
+            <a href="index.html" class="logo-link"><h1 class="gamehunt-logo">GameHunt</h1></a>
+        </div>
         <header>
             <div class="search-container" id="search-target">
-                <input type="text" placeholder="Search for any GAME or MOD..." class="search-box">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Search for any GAME or MOD..." class="search-box" id="search-input">
+                    <button class="search-btn" id="search-btn">🔍</button>
+                </div>
             </div>
         </header>
 
@@ -56,21 +58,19 @@
                 <div class="input-group"><input type="text" placeholder="Blocking filters..."></div>
             </div>
             <div class="sliders-container">
-                
-                <div class="slider-group">
-                    <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
-                    <input type="range" class="custom-slider">
-
-                </div>
                 <div class="slider-group">
                     <div class="slider-labels"><span>Older</span><span>Newer</span></div>
-                    <input type="range" class="custom-slider">
+                    <input type="range" class="custom-slider" id="date-slider">
+                </div>
+                <div class="slider-group">
+                    <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
+                    <input type="range" class="custom-slider" id="popularity-slider">
                 </div>
             </div>
         </section>
-        <section class="game-list" id="game-list">
-        </section>
+        <section class="game-list" id="game-list"></section>
     </main>
+
     <div id="image-modal" class="modal-overlay image-modal-layer">
         <button id="close-image-modal" class="close-modal image-modal-close">&times;</button>
         <button id="prev-screenshot" class="screenshot-nav-btn" aria-label="Previous">&#8249;</button>
@@ -80,18 +80,17 @@
         </div>
         <button id="next-screenshot" class="screenshot-nav-btn" aria-label="Next">&#8250;</button>
     </div>
+
     <div id="game-details-modal" class="modal-overlay">
         <div class="modal-content game-details-content">
             <button id="close-game-details" class="close-modal">&times;</button>
-            <div  id="game-details-body">
-            </div>
+            <div id="game-details-body"></div>
         </div>
     </div>
 
     <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
             <button id="close-login" class="close-modal">&times;</button>
-            
             <div id="login-form-container">
                 <h2 style="font-size: 32px; font-weight:100;">Login</h2>
                 <form id="login-form">
@@ -101,7 +100,6 @@
                     <p><button type="button" id="btn-to-register" style="color: rgb(75, 75, 196); cursor: pointer; border: none;">Register</button></p>
                 </form>
             </div>
-
             <div id="register-form-container" style="display: none;">
                 <h2 style="font-size: 32px; font-weight:100;">Register</h2>
                 <form id="register-form">
@@ -114,6 +112,9 @@
             </div>
         </div>
     </div>
+
+    <button id="floating-search-btn" class="floating-search-btn" title="Vissza a keresőhöz">🔍</button>
+
     <script src="user.js"></script>
     <script src="gameapi.js"></script>
     <script src="theme.js"></script>
