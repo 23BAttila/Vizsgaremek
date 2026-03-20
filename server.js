@@ -49,6 +49,19 @@ async function getAccessToken() {
     const data = await response.json();
     accessToken = data.access_token;
 }
+app.get("/games/popular", async (req, res) => {
+    try {
+        if (!accessToken) await getAccessToken();
+        const twoYearsAgo = Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 365 * 2;
+        const response = await fetch("https://api.igdb.com/v4/games", {
+            method: "POST",
+            headers: { "Client-ID": CLIENT_ID, "Authorization": `Bearer ${accessToken}`, "Content-Type": "text/plain" },
+            body: `fields name,summary,first_release_date,genres.name,rating,cover.url; where rating != null & rating_count > 10 & first_release_date > ${twoYearsAgo}; sort rating_count desc; limit 500;`
+        });
+        const data = await response.json();
+        res.json(data);
+    } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
+});
 app.get("/games", async (req, res) => {
     try {
         if (!accessToken) await getAccessToken();
@@ -67,11 +80,11 @@ app.get("/games", async (req, res) => {
         const response = await fetch("https://api.igdb.com/v4/games", {
             method: "POST",
             headers: { "Client-ID": CLIENT_ID, "Authorization": `Bearer ${accessToken}`, "Content-Type": "text/plain" },
-            body: `${searchClause} ${finalWhere} ${sortClause} fields name,summary,first_release_date,genres.name,rating,cover.url; limit 20;`
+            body: `${searchClause} ${finalWhere} ${sortClause} fields name,summary,first_release_date,genres.name,rating,cover.url; limit 500;`
         });
         const data = await response.json();
         res.json(data);
-    } catch (err) { console.error(err); res.status(500).json({ error: "Hiba történt" }); }
+    } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
 });
 app.get("/game/:id", async (req, res) => {
     try {
@@ -84,7 +97,7 @@ app.get("/game/:id", async (req, res) => {
         });
         const data = await response.json();
         res.json(data[0]);
-    } catch (err) { console.error(err); res.status(500).json({ error: "Hiba történt" }); }
+    } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
 });
 app.get("/genres", async (req, res) => {
     try {
@@ -96,7 +109,7 @@ app.get("/genres", async (req, res) => {
         });
         const data = await response.json();
         res.json(data);
-    } catch (err) { console.error(err); res.status(500).json({ error: "Hiba történt" }); }
+    } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => { console.log(`Gyors tesztelésre: http://localhost:${PORT}`); });

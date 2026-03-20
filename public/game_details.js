@@ -21,7 +21,7 @@ function openGameModal(id) {
             const genres = game.genres?.map(g => `<span class="tag" onclick="filterGenre(${g.id}); closeGameModal();">${g.name}</span>`).join("") || "N/A";
 
             const screenshotUrls = game.screenshots
-                ? game.screenshots.slice(0, 10).map(s => `https:${s.url.replace("t_thumb", "t_screenshot_big")}`)
+                ? game.screenshots.slice(0, 30).map(s => `https:${s.url.replace("t_thumb", "t_screenshot_big")}`)
                 : [];
             window.currentScreenshotUrls = screenshotUrls;
 
@@ -30,12 +30,13 @@ function openGameModal(id) {
                     `<img src="${url}" alt="Screenshot ${index + 1}" class="screenshot" onclick="openImageModal(currentScreenshotUrls, ${index})">`
                   ).join("")
                 : "";
+
             
 
             body.innerHTML = `
                 <div class="game-modal-inner">
                     <div class="game-modal-top">
-                        <img src="${imageUrl}" alt="${game.name}" class="game-modal-cover">
+                        <img src="${imageUrl}" alt="${game.name}" crossorigin="anonymous" class="game-modal-cover">
                         <div class="game-modal-info">
                             <h2 style="margin-top:0;">${game.name}</h2>
                             <p><strong>Release:</strong> ${release}</p>

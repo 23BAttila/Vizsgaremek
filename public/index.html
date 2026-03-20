@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <title>GameHunt</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
     <div id="category-panel" class="category-drawer">
@@ -19,7 +19,7 @@
         <div class="sidebar-icon">☰</div>
         <nav class="sidebar-menu">
             <a href="index.html"><span>Home</span></a>
-            <a href="#search-target"><span>Search</span></a>
+            <a id="floating-search-btn" class="floating-search-btn" href="#search-target"><span>Search</span></a>
             <a href="javascript:void(0)" id="open-categories"><span>Categories</span></a>
             <a href="#" id="favorites-link"><span>Favorites</span></a>
         </nav>
@@ -47,7 +47,10 @@
             <div class="search-container" id="search-target">
                 <div class="search-wrapper">
                     <input type="text" placeholder="Search for any GAME or MOD..." class="search-box" id="search-input">
-                    <button class="search-btn" id="search-btn">🔍</button>
+                    <button class="search-btn" id="search-btn">
+                    <img src="assets/search.png" alt="search" id="search-icon-dark">
+                    <img src="assets/white_search.png" alt="search" id="search-icon-light">
+                </button>
                 </div>
             </div>
         </header>
@@ -68,7 +71,23 @@
                 </div>
             </div>
         </section>
-        <section class="game-list" id="game-list"></section>
+        <section class="game-list" id="game-list">
+            <!--<div class="game-card">
+                <img src="https://placehold.co/264x352?text=No%0AImage%0AFound" alt="Image of the game" class="game-img-placeholder">
+                <div class="game-info">
+                    <h3>
+                        GAME
+                        <span class="fav-star">☆</span>
+                    </h3>
+                    <p class="release-date">Release date: DD/MM/YYYY</p>
+                    <div class="tags">
+                        <span class="tag" ">TAG</span>
+                    </div>
+                    <button class="details-btn">Details</button>
+                </div>
+            </div>--><!--Offline tesztelésre-->
+
+        </section>
     </main>
 
     <div id="image-modal" class="modal-overlay image-modal-layer">
@@ -96,7 +115,7 @@
                 <form id="login-form">
                     <input type="text" placeholder="Username / Email" class="modal-input" required>
                     <input type="password" placeholder="Password" class="modal-input" required>
-                    <button type="submit" class="login-submit">Login</button>
+                    <button style="letter-spacing: 2px;" type="submit" class="login-submit">Login</button>
                     <p><button type="button" id="btn-to-register" style="color: rgb(75, 75, 196); cursor: pointer; border: none;">Register</button></p>
                 </form>
             </div>
@@ -107,14 +126,12 @@
                     <input type="text" placeholder="Username" class="modal-input" required>
                     <input type="password" placeholder="Password" class="modal-input" required>
                     <button type="submit" class="login-submit">Create Account</button>
-                    <button type="button" id="btn-to-login" class="login-submit" style="color: white; background: #252a3300; border: 1px solid var(--accent-blue);">Back to Login</button>
+                    <button type="button" id="btn-to-login" class="login-submit" style="color: var(--based-on-theme); background: #252a3300; border: 1px solid var(--accent-blue);">Back to Login</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <button id="floating-search-btn" class="floating-search-btn" title="Vissza a keresőhöz">🔍</button>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
     <script src="user.js"></script>
     <script src="gameapi.js"></script>
     <script src="theme.js"></script>

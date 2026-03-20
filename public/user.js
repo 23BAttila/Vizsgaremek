@@ -160,7 +160,7 @@ if (favoritesLink) {
         e.preventDefault();
         const currentUser = localStorage.getItem('currentUser');
         if (!currentUser) {
-            alert("A kedvencekhez be kell jelentkezned!");
+            alert("For this function you have to log in.");
             loginModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             return;
@@ -170,7 +170,7 @@ if (favoritesLink) {
             const favGames = await response.json();
             if(typeof displayFavorites === 'function') displayFavorites(favGames);
         } catch (error) { 
-            console.error("Hiba a kedvencek betöltésekor:", error); 
+            console.error("Error when loading the favourites:", error); 
         }
     });
 }

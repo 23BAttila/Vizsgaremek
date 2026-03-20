@@ -1,45 +1,32 @@
-:root {
-    --theme-based-bg: #17191d;
-    --sidebar-bg: #1e2124;
-    --card-bg: #1a1d23;
-    --panel-bg: #1e2229;
-    --based-on-theme: #ffffff;
-    --text-white: #ffffff;
-    --text-gray: #bdbdbd;
-    --gamecard-border: #ffffff;
-    
-    --neon-blue: #00f2fe;
-    --neon-purple: #ae37ff;
-    --neon-red: #ff3c83;
-}
-
 body.light-theme {
     --theme-based-bg: #f0f2f5;
     --sidebar-bg: #e2e5ea;
     --card-bg: #ffffff;
+    --title-bg: #ffffff;
     --panel-bg: #e8eaed;
     --based-on-theme: #000000;
     --text-white: #111111;
     --text-gray: #555555;
     --gamecard-border: #00000060;
     --highlight: rgba(0, 0, 0, 0.267);
-    
-    --neon-blue: #0088cc;
-    --neon-purple: #7722bb;
-    --neon-red: #cc2255;
+    --blackawhite:#ffffff;
+    --secondary-highlight:rgba(0, 0, 0, 0.671);
 }
 
 body.dark-theme {
+    --blackawhite:#000000;
     --theme-based-bg: #17191d;
     --sidebar-bg: #1e2124;
     --card-bg: #1a1d23;
+    --title-bg: #060708;
     --panel-bg: #1e2229;
     --based-on-theme: #ffffff;
-    --based-on-theme-two: #808080;
+    --based-on-theme-two: #cecece;
     --text-white: #ffffff;
     --text-gray: #bdbdbd;
     --gamecard-border: #ffffff;
     --highlight: rgba(255, 255, 255, 0.404);
+    --secondary-highlight:rgba(255, 255, 255, 0.671);
 }
 
 * { 
@@ -78,7 +65,7 @@ body {
     cursor: pointer; 
     font-weight: 600; 
     text-transform: uppercase; 
-    font-size: 14px; 
+    font-size: 19px; 
     transition: 0.3s; 
 }
 
@@ -89,8 +76,12 @@ body {
 }
 
 .theme-toggle { 
-    background-color: var(--theme-based-bg); 
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1.9px);
+    -webkit-backdrop-filter: blur(1.9px);
     border: 1px solid var(--based-on-theme); 
+    background-color: var(--theme-based-bg);
     border-radius: 50%; 
     width: 44px; 
     height: 44px; 
@@ -171,14 +162,14 @@ body {
     height: auto; 
     position: fixed; 
     top: 0; 
-    right: -320px; 
-    width: 320px; 
-    height: 100%; 
     background-color: var(--panel-bg); 
     transition: right 0.4s ease; 
     color: var(--based-on-theme); 
     z-index: 2000; 
     padding: 30px; 
+    right: -480px;
+    width: 480px; 
+    height: 100%;
 }
 
 .category-drawer.open { 
@@ -255,17 +246,23 @@ body {
     font-weight: 900; 
     letter-spacing: -2px; 
     text-transform: uppercase;
-    background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 50%, var(--neon-red) 100%);
+    transition: 0.3s ease-in-out;
+    background-color: var(--based-on-theme);
+    
     -webkit-background-clip: text; 
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 10px rgba(174, 55, 255, 0.7)); 
-    animation: neonGlow 2.5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 5px var(--title-bg)); 
+    animation: neonGlow 5s ease-in-out infinite alternate;
+}
+.gamehunt-logo:hover{
+        transform: scale(1.05);
+        
 }
 
-@keyframes neonGlow {
-    0% { filter: drop-shadow(0 0 5px rgba(174, 55, 255, 0.5)); }
-    100% { filter: drop-shadow(0 0 15px rgba(174, 55, 255, 0.9)) drop-shadow(0 0 25px rgba(0, 242, 254, 0.6)); }
-}
+/*@keyframes neonGlow {
+    0% { filter: drop-shadow(0 0 2px rgba(174, 55, 255, 0.5)); }
+    100% { filter: drop-shadow(0 0 3.5px rgba(174, 55, 255, 0.9)) drop-shadow(0 0 5px rgba(0, 242, 254, 0.6)); }
+}*/
 
 header { 
     width: 100%; 
@@ -306,21 +303,27 @@ header {
 }
 
 .search-btn { 
+    max-width: 25px;
+    max-height: 25px;
     position: absolute; 
     right: 15px; 
-    top: 50%; 
+    top: 45%; 
     transform: translateY(-50%); 
     background: none; 
     border: none; 
-    cursor: pointer; 
-    font-size: 20px; 
+    cursor: pointer;    
+    font-size: 25px; 
     color: var(--based-on-theme); 
-    padding: 5px; 
+    padding: 0px; 
     transition: 0.3s; 
     z-index: 5; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
+}
+.search-btn img{
+    max-width: 25px;
+    max-height: 25px;
 }
 
 .search-box:focus + .search-btn { 
@@ -328,7 +331,8 @@ header {
 }
 
 .search-btn:hover { 
-    transform: translateY(-50%) scale(1.2); 
+    transform: translateY(-50%) scale(1.5); 
+
 }
 
 .filter-section { 
@@ -470,40 +474,56 @@ header {
 }
 
 .game-card { 
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
     display: flex; 
-    background: var(--card-bg); 
     padding: 12px; 
-    border-bottom: 4px solid white; 
+    border-bottom: 4px solid var(--based-on-theme); 
     transition: 0.3s; 
+    background-size: cover;
+    background-position: center;
 }
 
 .game-card:hover { 
     transform: translateY(-15px); 
-    box-shadow: -10px 0 82px rgba(255, 255, 255, 0.671); 
+    box-shadow: -10px 0 82px var(--secondary-highlight); 
     background-color: var(--theme-based-bg); 
     color: var(--based-on-theme-two); 
 }
+.game-card:hover img{ 
+    transition: 0.3s ease-in-out; 
+}
 
 .game-card img { 
-    width: 180px; 
-    height: 250px; 
-    object-fit: cover; 
-    border-radius: 12px; 
+    
     margin-right: 25px; 
     flex-shrink: 0; 
 }
+.game-card::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 12px;
+    z-index: -1;
+    filter: blur(40px);
+    opacity: 0.2;
+    background:repeating-radial-gradient(circle, var(--glow-color, transparent), transparent 0.05%);
+    transition: 0.3s;
+}
+.game-card:hover::before {
+    opacity: 0.9;
+    filter: blur(60px);
+}
 
 .game-img-placeholder { 
-    width: 180px; 
-    height: 250px; 
     background: #111; 
     margin-right: 25px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     font-size: 10px; 
-    color: #444; 
-    border-radius: 12px; 
+    color: #444;
     flex-shrink: 0; 
 }
 
@@ -528,7 +548,7 @@ header {
 }
 
 .tag:hover { 
-    color: white; 
+    color: var(--text-gray); 
     text-decoration: none; 
 }
 
@@ -609,8 +629,8 @@ header {
 .login-submit { 
     width: 100%; 
     padding: 12px; 
-    background: var(--theme-based-bg); 
-    color: var(--based-on-theme); 
+    background: var(--based-on-theme); 
+    color: var(--theme-based-bg); 
     border: none; 
     border-radius: 8px; 
     font-weight: bold; 
@@ -720,7 +740,7 @@ header {
 }
 
 .screenshot:hover { 
-    transform: scale(1.05); 
+    transform: scale(1.25); 
 }
 
 .game-screenshot { 
@@ -754,8 +774,8 @@ header {
 }
 
 .image-modal-center img { 
-    max-width: 85vw; 
-    max-height: 80vh; 
+    max-width: 90vw; 
+    max-height: 85vh; 
     border-radius: 8px; 
     display: block; 
     object-fit: contain; 
@@ -791,6 +811,7 @@ header {
 
 .screenshot-nav-btn:hover { 
     background: rgba(255,255,255,0.28); 
+    transform: scale(1.15);
 }
 
 .image-modal-close { 
@@ -810,6 +831,12 @@ header {
 }
 
 .user-menu-wrapper { 
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2.1px);
+    -webkit-backdrop-filter: blur(1.9px);
+
     position: relative; 
 }
 
@@ -874,31 +901,34 @@ header {
 }
 
 .fav-star { 
-    font-size: 24px; 
+    font-size: 32px;
     cursor: pointer; 
     color: var(--based-on-theme); 
     transition: 0.2s; 
     user-select: none; 
-    float: right; 
+    float:inline-end;
 }
 
 .fav-star:hover { 
     transform: scale(1.2); 
+    color: var(--based-on-theme); 
+    text-shadow: 0 0 10px var(--card-bg);
+    transition: 0.2s;
 }
 
 .fav-star.active { 
-    color: gold; 
-    text-shadow: 0 0 10px gold; 
+    text-shadow: 0 0 2px var(--based-on-theme);
+     transition: 0.2s;
 }
 
 .loader { 
-    border: 6px solid #f3f3f3; 
-    border-top: 6px solid var(--based-on-theme); 
-    border-radius: 50%; 
-    width: 40px; 
-    height: 40px; 
-    animation: spin 1s linear infinite; 
-    margin: auto; 
+    border: 6px solid var(--based-on-theme);
+    border-top: 6px solid var(--card-bg);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: auto;
 }
 
 @keyframes spin { 
@@ -906,39 +936,65 @@ header {
     100% { transform: rotate(360deg); } 
 }
 
-
-.floating-search-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background-color: var(--theme-based-bg);
-    border: 2px solid var(--based-on-theme);
-    color: var(--based-on-theme);
-    font-size: 24px;
+.pagination {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 30px 0 10px;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+    background: transparent;
+    border: 1px solid var(--based-on-theme);
+    color: var(--based-on-theme);
+    border-radius: 8px;
     cursor: pointer;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
-.floating-search-btn.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.floating-search-btn:hover {
-    background-color: var(--based-on-theme);
+.page-btn:hover:not(:disabled) {
+    background: var(--based-on-theme);
     color: var(--theme-based-bg);
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 6px 20px var(--highlight);
+}
+
+.page-btn.active {
+    background: var(--based-on-theme);
+    color: var(--theme-based-bg);
+}
+
+.page-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.page-ellipsis {
+    color: var(--text-gray);
+    padding: 0 4px;
+    font-size: 15px;
+}
+#search-target {
+}
+
+#search-target.visible {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1400;
+    padding: 10px 20px;
+    border-radius: 40px;
+    width: clamp(280px, 50vw, 560px);
+    animation: fadeSlideDown 0.45s ease-in-out;
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0%; transform: translateX(-50%) translateY(-16px); }
+    to   { opacity: 100%; transform: translateX(-50%) translateY(0); }
 }
