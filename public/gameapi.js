@@ -23,31 +23,52 @@ blockTagsDisplay.className = "active-filter-tags block-tags";
 
 document.querySelectorAll(".input-group")[0].appendChild(addTagsDisplay);
 document.querySelectorAll(".input-group")[1].appendChild(blockTagsDisplay);
+function updateSliderLabels() {
+    const dateGroup = dateSlider?.closest('.slider-group');
+    const popGroup = popularitySlider?.closest('.slider-group');
+
+    if (dateGroup) {
+        const v = dateValue;
+        let label = "Any date";
+        if (v < 20) label = "Very old (pre-2000)";
+        else if (v < 40) label = "Older (2000–2010)";
+        else if (v < 60) label = "Any date";
+        else if (v < 80) label = "Recent (2015+)";
+        else label = "New (2020+)";
+        let el = dateGroup.querySelector('.slider-value-label');
+        if (!el) { el = document.createElement('div'); el.className = 'slider-value-label'; dateGroup.appendChild(el); }
+        el.textContent = label;
+    }
+    if (popGroup) {
+        const v = popularityValue;
+        let label = "Any";
+        if (v < 20) label = "Very niche";
+        else if (v < 40) label = "Niche";
+        else if (v < 60) label = "Any";
+        else if (v < 80) label = "Popular";
+        else label = "Very popular";
+        let el = popGroup.querySelector('.slider-value-label');
+        if (!el) { el = document.createElement('div'); el.className = 'slider-value-label'; popGroup.appendChild(el); }
+        el.textContent = label;
+    }
+}
 
 if (popularitySlider) {
     popularitySlider.value = 50;
-    popularitySlider.addEventListener("change", () => {
-        popularityValue = parseInt(popularitySlider.value);
-        if (popularityValue === 50) { applyFilters(); return; }
-        const order = popularityValue > 50 ? "desc" : "asc";
-        gameList.innerHTML = `<div class="loader"></div>`;
-        fetch(`/games?sortBy=rating&sortOrder=${order}`)
-            .then(res => res.json())
-            .then(games => { allFetchedGames = games; applyFilters(); });
-    });
+    popularitySlider.addEventListener("input", () => {
+    popularityValue = parseInt(popularitySlider.value);
+    updateSliderLabels();
+    applyFilters();
+});
 }
 
 if (dateSlider) {
     dateSlider.value = 50;
-    dateSlider.addEventListener("change", () => {
-        dateValue = parseInt(dateSlider.value);
-        if (dateValue === 50) { applyFilters(); return; }
-        const order = dateValue > 50 ? "desc" : "asc";
-        gameList.innerHTML = `<div class="loader"></div>`;
-        fetch(`/games?sortBy=first_release_date&sortOrder=${order}`)
-            .then(res => res.json())
-            .then(games => { allFetchedGames = games; applyFilters(); });
-    });
+    dateSlider.addEventListener("input", () => {
+    dateValue = parseInt(dateSlider.value);
+    updateSliderLabels();
+    applyFilters();
+});
 }
 
 if (addInput) {
@@ -100,6 +121,19 @@ function removeBlockFilter(name) {
     renderFilterTags();
     applyFilters();
 }
+async function attachPopularity(games) {
+    const ids = games.map(g => g.id);
+    try {
+        const res = await fetch("/api/popularity", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids })
+        });
+        const map = await res.json();
+        games.forEach(g => { g.popularityScore = map[g.id] ?? null; });
+    } catch (e) { console.error("Popularity fetch failed", e); }
+    return games;
+}
 
 function applyFilters() {
     let games = [...allFetchedGames];
@@ -118,22 +152,34 @@ function applyFilters() {
             )
         );
     }
-    if (popularityValue !== 50) {
-        const order = popularityValue > 50 ? -1 : 1;
-        games.sort((a, b) => {
-            const ra = a.rating ?? (order === -1 ? -1 : 9999);
-            const rb = b.rating ?? (order === -1 ? -1 : 9999);
-            return order * (rb - ra);
-        });
-    }
-    if (dateValue !== 50) {
-        const order = dateValue > 50 ? -1 : 1;
-        games.sort((a, b) => {
-            const da = a.first_release_date ?? (order === -1 ? -1 : 9999999999);
-            const db = b.first_release_date ?? (order === -1 ? -1 : 9999999999);
-            return order * (db - da);
-        });
-    }
+    if (popularityValue !== 50 || dateValue !== 50) {
+    games.sort((a, b) => {
+        if (dateValue !== 50) {
+            const order = dateValue > 50 ?  1 : -1;
+            const now = Math.floor(Date.now() / 1000);
+            const da = (a.first_release_date && a.first_release_date <= now) ? a.first_release_date : null;
+            const db = (b.first_release_date && b.first_release_date <= now) ? b.first_release_date : null;
+            if (da === null && db !== null) return 1;
+            if (da !== null && db === null) return -1;
+            if (da !== null && db !== null) {
+                const diff = order * (db - da);
+                if (diff !== 0) return diff;
+            }
+        }
+        if (popularityValue !== 50) {
+            const order = popularityValue > 50 ? -1 : 1;
+            //console.log("popularity value debug:", popularityValue);
+            //console.log("rating_counts debug mapping:", games.slice(0,5).map(g => g.rating_count));
+            const ra = a.popularityScore ?? null;
+            const rb = b.popularityScore ?? null;
+            if (ra === null && rb === null) return 0;
+            if (ra === null) return 1;
+            if (rb === null) return -1;
+            return order * (rb - ra);   
+        }
+        return 0;
+    });
+}
 
     filteredGames = games;
     currentPage = 1;
@@ -225,6 +271,7 @@ async function executeSearch() {
         return;
     }
     allFetchedGames = await response.json();
+    allFetchedGames = await attachPopularity(allFetchedGames);
     applyFilters();
 }
 
@@ -262,7 +309,7 @@ function filterGenre(id) {
     gameList.innerHTML = `<div class="loader"></div>`;
     fetch(`/games?genre=${id}`)
         .then(res => res.json())
-        .then(games => { allFetchedGames = games; applyFilters(); });
+        .then(async games => { allFetchedGames = await attachPopularity(games); applyFilters(); });
 }
 
 function clearAllFilters() {
@@ -322,7 +369,7 @@ function displayFavorites(games) {
 gameList.innerHTML = `<div class="loader"></div>`;
 fetch("/games/popular")
     .then(res => res.json())
-    .then(games => { allFetchedGames = games; applyFilters(); })
+    .then(async games => { allFetchedGames = await attachPopularity(games); applyFilters(); })
     .catch(() => {
         gameList.innerHTML = `<p style="text-align:center; color: var(--text-gray); padding: 40px;">Looks like there is no popular game here...</p>`;
     });

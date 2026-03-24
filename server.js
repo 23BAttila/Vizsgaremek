@@ -43,6 +43,22 @@ app.post("/api/favorites", (req, res) => {
         res.json({ message: "Added to favorites", isFavorite: true });
     }
 });
+app.post("/api/popularity", async (req, res) => {
+    try {
+        if (!accessToken) await getAccessToken();
+        const { ids } = req.body;
+        if (!ids || ids.length === 0) return res.json({});
+        const response = await fetch("https://api.igdb.com/v4/popularity_primitives", {
+            method: "POST",
+            headers: { "Client-ID": CLIENT_ID, "Authorization": `Bearer ${accessToken}`, "Content-Type": "text/plain" },
+            body: `fields game_id,value,popularity_type; where game_id = (${ids.join(",")}) & popularity_type = 1; limit 500;`
+        });
+        const data = await response.json();
+        const map = {};
+        data.forEach(p => { map[p.game_id] = p.value; });
+        res.json(map);
+    } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
+});
 let accessToken = "";
 async function getAccessToken() {
     const response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials`, { method: "POST" });
@@ -56,7 +72,7 @@ app.get("/games/popular", async (req, res) => {
         const response = await fetch("https://api.igdb.com/v4/games", {
             method: "POST",
             headers: { "Client-ID": CLIENT_ID, "Authorization": `Bearer ${accessToken}`, "Content-Type": "text/plain" },
-            body: `fields name,summary,first_release_date,genres.name,rating,cover.url; where rating != null & rating_count > 10 & first_release_date > ${twoYearsAgo}; sort rating_count desc; limit 500;`
+            body: `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url; where rating != null & rating_count > 10 & first_release_date > ${twoYearsAgo}; sort rating_count desc; limit 500;`
         });
         const data = await response.json();
         res.json(data);
@@ -67,20 +83,15 @@ app.get("/games", async (req, res) => {
         if (!accessToken) await getAccessToken();
         const search = req.query.search || "";
         const genre = req.query.genre || "";
-        const sortBy = req.query.sortBy || "";
-        const sortOrder = req.query.sortOrder || "desc";
         const conditions = [];
         if (genre) conditions.push(`genres = (${genre})`);
-        if (sortBy === "rating") conditions.push("rating != null");
-        if (sortBy === "first_release_date") conditions.push("first_release_date != null");
-        const finalWhere = conditions.length ? `where ${conditions.join(" & ")};` : "";
-        const sortClause = sortBy ? `sort ${sortBy} ${sortOrder};` : "";
-        const searchClause = search && !sortBy ? `search "${search}";` : "";
-        if (search && sortBy) finalWhere ? conditions.push(`name ~ *"${search}"*`) : `where name ~ *"${search}"*;`;
+        const whereClause = conditions.length ? `where ${conditions.join(" & ")};` : "";
+        const searchClause = search ? `search "${search}";` : "";
+        const queryBody = `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url; ${searchClause} ${whereClause} limit 500;`;
         const response = await fetch("https://api.igdb.com/v4/games", {
             method: "POST",
             headers: { "Client-ID": CLIENT_ID, "Authorization": `Bearer ${accessToken}`, "Content-Type": "text/plain" },
-            body: `${searchClause} ${finalWhere} ${sortClause} fields name,summary,first_release_date,genres.name,rating,cover.url; limit 500;`
+            body: queryBody
         });
         const data = await response.json();
         res.json(data);
@@ -112,4 +123,4 @@ app.get("/genres", async (req, res) => {
     } catch (err) { console.error(err); res.status(500).json({ error: "Error" }); }
 });
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, "0.0.0.0", () => { console.log(`Gyors tesztelésre: http://localhost:${PORT}`); });
+app.listen(PORT, "0.0.0.0", () => { console.log(`A szerver lokálisan elérhető: http://localhost:${PORT}`); });

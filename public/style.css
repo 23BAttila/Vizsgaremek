@@ -424,6 +424,14 @@ header {
     margin-bottom: 12px; 
     font-weight: 200; 
 }
+.slider-value-label {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-top: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
 
 .custom-slider { 
     -webkit-appearance: none; 
