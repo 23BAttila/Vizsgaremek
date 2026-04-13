@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <title>GameHunt</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="bg-grid-layer"></div>
     <div id="category-panel" class="category-drawer">
         <div class="drawer-header">
             <h3>Categories</h3>
@@ -23,16 +25,18 @@
             <a href="javascript:void(0)" id="open-categories"><span>Categories</span></a>
             <a href="#" id="favorites-link"><span>Favorites</span></a>
         </nav>
+        <footer class="sidebar-menu-footer">
+            <!--A footer here about us, api/s, db,etc.-->
+        </footer>
     </div>
     <div class="top-right-controls">
-        <div class="user-menu-wrapper">
+            <span class="material-icons user-icon-main">account_circle</span>
             <button class="login-btn-fixed">Login</button>
             <div id="user-dropdown" class="user-dropdown">
                 <div class="user-dropdown-name" id="user-dropdown-name"></div>
                 <hr class="user-dropdown-divider">
                 <button class="user-dropdown-item" id="dropdown-logout">Log Out</button>
             </div>
-        </div>
         <button class="theme-toggle" id="theme-toggle-btn">
             <img src="assets/brightness.png" alt="Light Mode" class="theme-icon" id="light-mode-icon">
             <img src="assets/white_moon-stars.png" alt="Dark Mode" class="theme-icon" id="dark-mode-icon">
@@ -41,7 +45,7 @@
 
     <main class="main-content">
         <div class="gamehunt-logo-container">
-            <a href="index.html" class="logo-link"><h1 class="gamehunt-logo">GameHunt</h1></a>
+            <a href="index.html" class="logo-link"><h1 class="logo-pop gamehunt-logo">GameHunt</h1></a>
         </div>
         <header>
             <div class="search-container" id="search-target">
@@ -68,6 +72,20 @@
                 <div class="slider-group">
                     <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
                     <input type="range" class="custom-slider" id="popularity-slider">
+                </div>
+            </div>
+            <div class="extra-features" style="display: flex; gap: 20px; margin-top: 20px;">
+            <div style="flex: 1;">
+                <label style="color: var(--based-on-theme);">Platform:</label>
+                <select id="platform-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                    <option value="">All Platforms</option>
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <label style="color: var(--based-on-theme);">Developer/Publisher:</label>
+                <select id="company-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                    <option value="">All Companies</option>
+                </select>
                 </div>
             </div>
         </section>
@@ -101,7 +119,7 @@
     </div>
 
     <div id="game-details-modal" class="modal-overlay">
-        <div class="modal-content game-details-content">
+        <div class="game-details-content">
             <button id="close-game-details" class="close-modal">&times;</button>
             <div id="game-details-body"></div>
         </div>
