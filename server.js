@@ -4,7 +4,7 @@ const cors = require("cors");
 const fetch = require("node-fetch");
 const path = require("path");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");            // <-- Changed to bcryptjs
+const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -47,7 +47,7 @@ app.get("/test-bcrypt", async (req, res) => {
 app.post("/api/register", async (req, res) => {
   try {
     const { email, username, password, birthdate } = req.body;
-    console.log(`[REGISTER] Attempt: ${email} / ${username}`);
+    //console.log(`[REGISTER] Attempt: ${email} / ${username}`);
 
     const existingUser = await User.findOne({
       $or: [
@@ -56,7 +56,7 @@ app.post("/api/register", async (req, res) => {
       ]
     });
     if (existingUser) {
-      console.log(`[REGISTER] User already exists: ${email} / ${username}`);
+      //console.log(`[REGISTER] User already exists: ${email} / ${username}`);
       return res.status(400).json({ error: "Username or Email already exists!" });
     }
 
@@ -74,7 +74,7 @@ app.post("/api/register", async (req, res) => {
     const isAdult = age >= 18;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(`[REGISTER] Generated hash: ${hashedPassword.substring(0, 20)}...`);
+    //console.log(`[REGISTER] Generated hash: ${hashedPassword.substring(0, 20)}...`);
 
     const newUser = new User({
       userId: uuidv4(),
@@ -84,7 +84,7 @@ app.post("/api/register", async (req, res) => {
       isAdult
     });
     await newUser.save();
-    console.log(`[REGISTER] User saved successfully: ${username}`);
+    //console.log(`[REGISTER] User saved successfully: ${username}`);
     res.json({ message: "Successful registration!" });
     } catch (err) {
       console.error("Registration Error:", err.message, err.code);
@@ -95,27 +95,27 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(`[LOGIN] Attempt: ${username} / ${password}`);
+    //console.log(`[LOGIN] Attempt: ${username} / ${password}`);
   
     const user = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
     if (!user) {
-      console.log(`[LOGIN] User not found: ${username}`);
+      //console.log(`[LOGIN] User not found: ${username}`);
       return res.status(401).json({ error: "User not found!" });
     }
 
-    console.log(`[LOGIN] Stored hash for ${username}: ${password} - ${user.password}`);
+    //console.log(`[LOGIN] Stored hash for ${username}: ${password} - ${user.password}`);
     const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log(`[LOGIN] bcrypt.compare result: ${passwordMatch}`);
+    //console.log(`[LOGIN] bcrypt.compare result: ${passwordMatch}`);
 
     if (!passwordMatch) {
-      console.log(`[LOGIN] Password mismatch for: ${username}`);
+      //console.log(`[LOGIN] Password mismatch for: ${username}`);
       return res.status(401).json({ error: "Wrong credentials!" });
     }
 
-    console.log(`[LOGIN] Success: ${username}`);
+    //console.log(`[LOGIN] Success: ${username}`);
     res.json({ username: user.username, isAdult: user.isAdult });
   } catch (err) {
-    console.error("Login error:", err);
+    //console.error("Login error:", err);
     res.status(500).json({ error: "Login failed!" });
   }
 });

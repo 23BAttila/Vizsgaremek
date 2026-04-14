@@ -193,12 +193,13 @@ if (registerForm) {
       if (response.ok) {
         showToast("Registration successful! Please log in.", "success");
         e.target.reset();
-        birthdateInput.value = "";
+        document.getElementById("register-birthdate").value = "";
           btnToLogin.click();
       } else {
         showToast(result.error || "Registration failed!", "error");
       }
     } catch (error) {
+      console.log(error)
       showToast("Server error. Please try again.", "error");
     }
   });
