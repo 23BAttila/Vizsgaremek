@@ -1309,6 +1309,7 @@ header {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--gamecard-border);
+    color: var(--accent-blue, #4a9eff);
 }
 
 .admin-modal-header h2 {
@@ -1359,14 +1360,15 @@ header {
 }
 
 .admin-action-btn:hover:not(:disabled) {
-    background: red;
-    color: red;
+    background: rgba(255, 0, 0, 0);
+    color: var(--accent-blue, #4a9eff);
+    border-color: var(--accent-blue, #4a9eff);
 }
 
 .admin-action-btn.danger:hover:not(:disabled) {
-    background: #c83232;
-    border-color: #c83232;
-    color: white;
+    background: #c8323200;
+    border-color: var(--accent-blue, #4a9eff);
+    color: var(--accent-blue, #4a9eff);
 }
 
 .admin-action-btn:disabled {

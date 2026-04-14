@@ -477,7 +477,12 @@ app.post("/api/admin/toggle-adult", requireAdmin, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+/* 
 
+db.users.updateOne(
+  { username: "[admin_name]" },
+  { $set: { isAdmin: true, adminLevel: 0 } }
+)*/
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);

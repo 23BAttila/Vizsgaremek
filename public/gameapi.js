@@ -39,7 +39,7 @@ const companySelect = document.getElementById("company-select");
 
 function getAdultParam() {
   const isAdult = localStorage.getItem("isAdult");
-  return isAdult === "false" ? "false" : "true";
+  return isAdult === "true" ? "true" : "false";
 }
 
 function updateSliderLabels() {
