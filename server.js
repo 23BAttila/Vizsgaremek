@@ -86,10 +86,10 @@ app.post("/api/register", async (req, res) => {
     await newUser.save();
     console.log(`[REGISTER] User saved successfully: ${username}`);
     res.json({ message: "Successful registration!" });
-  } catch (err) {
-    console.error("Registration Error:", err);
-    res.status(400).json({ error: "Database error or invalid data." });
-  }
+    } catch (err) {
+      console.error("Registration Error:", err.message, err.code);
+      res.status(400).json({ error: err.message }); // show real error in toast
+    }
 });
 
 app.post("/api/login", async (req, res) => {

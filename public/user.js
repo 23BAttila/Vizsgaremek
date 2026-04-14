@@ -168,14 +168,12 @@ if (btnToLogin) {
 if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const inputs = e.target.querySelectorAll("input");
-    const birthdateInput = document.getElementById("register-birthdate");
 
     const data = {
-      email: inputs[0].value.trim(),
-      username: inputs[1].value.trim(),
-      password: inputs[2].value.trim(),
-      birthdate: birthdateInput.value
+      email: e.target.querySelector('input[type="email"]').value.trim(),
+      username: e.target.querySelector('input[type="text"]').value.trim(),
+      password: e.target.querySelector('input[type="password"]').value.trim(),
+      birthdate: document.getElementById("register-birthdate").value
     };
 
     if (!data.email || !data.username || !data.password || !data.birthdate) {
@@ -196,7 +194,7 @@ if (registerForm) {
         showToast("Registration successful! Please log in.", "success");
         e.target.reset();
         birthdateInput.value = "";
-        btnToLogin.click();
+          btnToLogin.click();
       } else {
         showToast(result.error || "Registration failed!", "error");
       }
