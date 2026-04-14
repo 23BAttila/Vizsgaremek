@@ -35,19 +35,10 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", userSchema);
 
-// ---------- Temporary bcrypt test route ----------
-app.get("/test-bcrypt", async (req, res) => {
-  const plain = "test123";
-  const hash = await bcrypt.hash(plain, 10);
-  const match = await bcrypt.compare(plain, hash);
-  res.json({ plain, hash, match });
-});
-
 // ---------- User Auth ----------
 app.post("/api/register", async (req, res) => {
   try {
     const { email, username, password, birthdate } = req.body;
-    //console.log(`[REGISTER] Attempt: ${email} / ${username}`);
 
     const existingUser = await User.findOne({
       $or: [
@@ -56,7 +47,6 @@ app.post("/api/register", async (req, res) => {
       ]
     });
     if (existingUser) {
-      //console.log(`[REGISTER] User already exists: ${email} / ${username}`);
       return res.status(400).json({ error: "Username or Email already exists!" });
     }
 
@@ -74,8 +64,6 @@ app.post("/api/register", async (req, res) => {
     const isAdult = age >= 18;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    //console.log(`[REGISTER] Generated hash: ${hashedPassword.substring(0, 20)}...`);
-
     const newUser = new User({
       userId: uuidv4(),
       email,
@@ -84,38 +72,29 @@ app.post("/api/register", async (req, res) => {
       isAdult
     });
     await newUser.save();
-    //console.log(`[REGISTER] User saved successfully: ${username}`);
     res.json({ message: "Successful registration!" });
-    } catch (err) {
-      console.error("Registration Error:", err.message, err.code);
-      res.status(400).json({ error: err.message }); // show real error in toast
-    }
+  } catch (err) {
+    console.error("Registration Error:", err);
+    res.status(400).json({ error: "Database error or invalid data." });
+  }
 });
 
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    //console.log(`[LOGIN] Attempt: ${username} / ${password}`);
-  
     const user = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
     if (!user) {
-      //console.log(`[LOGIN] User not found: ${username}`);
-      return res.status(401).json({ error: "User not found!" });
-    }
-
-    //console.log(`[LOGIN] Stored hash for ${username}: ${password} - ${user.password}`);
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    //console.log(`[LOGIN] bcrypt.compare result: ${passwordMatch}`);
-
-    if (!passwordMatch) {
-      //console.log(`[LOGIN] Password mismatch for: ${username}`);
       return res.status(401).json({ error: "Wrong credentials!" });
     }
 
-    //console.log(`[LOGIN] Success: ${username}`);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Wrong credentials!" });
+    }
+
     res.json({ username: user.username, isAdult: user.isAdult });
   } catch (err) {
-    //console.error("Login error:", err);
+    console.error("Login error:", err);
     res.status(500).json({ error: "Login failed!" });
   }
 });
@@ -193,13 +172,13 @@ app.post("/api/popularity", async (req, res) => {
   }
 });
 
-// ---------- Games Endpoints ----------
+// ---------- Games Endpoints (FIXED: added 'themes' to fields) ----------
 app.get("/games/popular", async (req, res) => {
   try {
     if (!accessToken) await getAccessToken();
     const isAdult = req.query.adult !== "false";
     const twoYearsAgo = Math.floor(Date.now() / 1000) - 60 * 60 * 24 * 365 * 2;
-    let body = `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url,platforms,involved_companies.company.name; where rating != null & rating_count > 10 & first_release_date > ${twoYearsAgo}`;
+    let body = `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url,platforms,involved_companies.company.name,themes; where rating != null & rating_count > 10 & first_release_date > ${twoYearsAgo}`;
     if (!isAdult) body += ` & themes != 42`;
     body += `; sort rating_count desc; limit 500;`;
     const response = await fetch("https://api.igdb.com/v4/games", {
@@ -232,7 +211,7 @@ app.get("/games", async (req, res) => {
 
     const whereClause = conditions.length ? `where ${conditions.join(" & ")};` : "";
     const searchClause = search ? `search "${search}";` : "";
-    const queryBody = `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url,platforms,involved_companies.company.name; ${searchClause} ${whereClause} limit 500;`;
+    const queryBody = `fields name,summary,first_release_date,genres.name,rating,rating_count,cover.url,platforms,involved_companies.company.name,themes; ${searchClause} ${whereClause} limit 500;`;
 
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
@@ -332,7 +311,7 @@ app.get("/companies", async (req, res) => {
   }
 });
 
-// ---------- Admin Endpoints ----------
+// ---------- Admin Endpoints (unchanged) ----------
 async function requireAdmin(req, res, next) {
   const { requestedBy } = req.body;
   if (!requestedBy) {
@@ -477,12 +456,7 @@ app.post("/api/admin/toggle-adult", requireAdmin, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-/* 
 
-db.users.updateOne(
-  { username: "[admin_name]" },
-  { $set: { isAdmin: true, adminLevel: 0 } }
-)*/
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
