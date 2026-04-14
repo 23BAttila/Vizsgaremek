@@ -14,23 +14,18 @@ let popularityValue = 50;
 let dateValue = 50;
 let currentSearchQuery = "";
 
-// NEW: platform and company filters
 let selectedPlatforms = [];
 let selectedCompanies = [];
 
-// Pagination configuration
 const GAMES_PER_PAGE = 20;
 let currentPage = 1;
 
-// Filter sliders
 const dateSlider = document.getElementById("date-slider");
 const popularitySlider = document.getElementById("popularity-slider");
 
-// Input fields for adding/blocking specific genre tags
 const addInput = document.querySelectorAll(".input-group input")[0];
 const blockInput = document.querySelectorAll(".input-group input")[1];
 
-// Containers for displaying active filter tags
 const addTagsDisplay = document.createElement("div");
 addTagsDisplay.className = "active-filter-tags";
 const blockTagsDisplay = document.createElement("div");
@@ -39,13 +34,14 @@ blockTagsDisplay.className = "active-filter-tags block-tags";
 document.querySelectorAll(".input-group")[0].appendChild(addTagsDisplay);
 document.querySelectorAll(".input-group")[1].appendChild(blockTagsDisplay);
 
-// NEW: platform and company select elements
 const platformSelect = document.getElementById("platform-select");
 const companySelect = document.getElementById("company-select");
 
-/**
- * Updates the text labels above the date and popularity sliders
- */
+function getAdultParam() {
+  const isAdult = localStorage.getItem("isAdult");
+  return isAdult === "false" ? "false" : "true";
+}
+
 function updateSliderLabels() {
   const dateGroup = dateSlider?.closest(".slider-group");
   const popGroup = popularitySlider?.closest(".slider-group");
@@ -87,7 +83,6 @@ function updateSliderLabels() {
   }
 }
 
-// Sliders event listeners
 if (popularitySlider) {
   popularitySlider.value = 50;
   popularitySlider.addEventListener("input", () => {
@@ -106,7 +101,6 @@ if (dateSlider) {
   });
 }
 
-// NEW: Platform & Company select listeners
 if (platformSelect) {
   platformSelect.addEventListener("change", () => {
     selectedPlatforms = Array.from(platformSelect.selectedOptions).map(opt => parseInt(opt.value));
@@ -121,7 +115,6 @@ if (companySelect) {
   });
 }
 
-// Add Genre input
 if (addInput) {
   addInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
@@ -140,7 +133,6 @@ if (addInput) {
   });
 }
 
-// Block Genre input
 if (blockInput) {
   blockInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
@@ -181,10 +173,6 @@ function removeBlockFilter(name) {
   applyFilters();
 }
 
-/**
- * Fetches popularity scores and attaches them to games.
- * Uses rating as fallback if popularity is missing.
- */
 async function attachPopularity(games) {
   const ids = games.map(g => g.id);
   try {
@@ -195,7 +183,6 @@ async function attachPopularity(games) {
     });
     const map = await res.json();
     games.forEach(g => {
-      // Fallback to total_rating/100 if popularity missing
       g.popularityScore = map[g.id] ?? (g.total_rating ? g.total_rating / 100 : 0);
     });
   } catch (e) {
@@ -207,13 +194,9 @@ async function attachPopularity(games) {
   return games;
 }
 
-/**
- * Applies all active filters (genres, platforms, companies) and sorts games.
- */
 function applyFilters() {
   let games = [...allFetchedGames];
 
-  // Genre ADD filters (require ALL tags)
   if (addFilters.length > 0) {
     games = games.filter(g =>
       g.genres && addFilters.every(f =>
@@ -222,7 +205,6 @@ function applyFilters() {
     );
   }
 
-  // Genre BLOCK filters (exclude if ANY block tag present)
   if (blockFilters.length > 0) {
     games = games.filter(g =>
       !g.genres || !blockFilters.some(f =>
@@ -231,7 +213,6 @@ function applyFilters() {
     );
   }
 
-  // Platform filter (must have ALL selected platforms)
   if (selectedPlatforms.length > 0) {
     games = games.filter(g =>
       g.platforms && selectedPlatforms.every(pid =>
@@ -240,7 +221,6 @@ function applyFilters() {
     );
   }
 
-  // Company filter (involved with ANY selected company)
   if (selectedCompanies.length > 0) {
     games = games.filter(g =>
       g.involved_companies && selectedCompanies.some(cid =>
@@ -249,7 +229,6 @@ function applyFilters() {
     );
   }
 
-  // Slider sorting with normalization
   if (popularityValue !== 50 || dateValue !== 50) {
     const dateWeight = (dateValue - 50) / 50;
     const popWeight = (popularityValue - 50) / 50;
@@ -320,7 +299,7 @@ function renderPage() {
           </h3>
           <p class="release-date">Release date: ${releaseDate}</p>
           <div class="tags">
-            ${game.genres ? game.genres.map(g =>`<span class="tag" onclick="filterGenre(${g.id})">${g.name}</span>`).join("") : ""}
+            ${game.genres ? game.genres.map(g => `<span class="tag" onclick="filterGenre(${g.id})">${g.name}</span>`).join("") : ""}
           </div>
           <button class="details-btn" onclick="openGame(${game.id})">Details</button>
         </div>
@@ -371,8 +350,8 @@ async function executeSearch() {
   currentSearchQuery = query;
   gameList.innerHTML = `<div class="loader"></div>`;
 
-  // Ensure we request platforms and involved_companies for filtering
-  const response = await fetch(`/games?search=${encodeURIComponent(query)}`);
+  const adultParam = getAdultParam();
+  const response = await fetch(`/games?search=${encodeURIComponent(query)}&adult=${adultParam}`);
   if (!response.ok) {
     gameList.innerHTML = `<p style="color: white; background-color: red; border: 4px solid #ffffff; text-align: center; font-size: 28px;">Error happened while fetching...<br>Please try again later.<br>${response.status} ${response.statusText}</p>`;
     return;
@@ -405,7 +384,6 @@ function loadGenres() {
     .catch(err => console.error("Failed to load genres:", err));
 }
 
-// NEW: Load platforms and companies for dropdowns
 async function loadPlatforms() {
   try {
     const res = await fetch("/platforms");
@@ -442,7 +420,6 @@ async function loadCompanies() {
   }
 }
 
-// Initialize everything on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   loadGenres();
   loadPlatforms();
@@ -465,7 +442,7 @@ function filterGenre(id) {
 
   gameList.innerHTML = `<div class="loader"></div>`;
 
-  let url = `/games?genre=${id}`;
+  let url = `/games?genre=${id}&adult=${getAdultParam()}`;
   if (currentSearchQuery) {
     url += `&search=${encodeURIComponent(currentSearchQuery)}`;
   }
@@ -539,9 +516,8 @@ function displayFavorites(games) {
   setTimeout(() => applyCardGradients(), 50);
 }
 
-// Initial popular games load
 gameList.innerHTML = `<div class="loader"></div>`;
-fetch("/games/popular")
+fetch(`/games/popular?adult=${getAdultParam()}`)
   .then(res => res.json())
   .then(async games => {
     allFetchedGames = await attachPopularity(games);

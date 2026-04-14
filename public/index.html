@@ -75,17 +75,17 @@
                 </div>
             </div>
             <div class="extra-features" style="display: flex; gap: 20px; margin-top: 20px;">
-            <div style="flex: 1;">
-                <label style="color: var(--based-on-theme);">Platform:</label>
-                <select id="platform-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
-                    <option value="">All Platforms</option>
-                </select>
-            </div>
-            <div style="flex: 1;">
-                <label style="color: var(--based-on-theme);">Developer/Publisher:</label>
-                <select id="company-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
-                    <option value="">All Companies</option>
-                </select>
+                <div style="flex: 1;">
+                    <label style="color: var(--based-on-theme);">Platform:</label>
+                    <select id="platform-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                        <option value="">All Platforms</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="color: var(--based-on-theme);">Developer/Publisher:</label>
+                    <select id="company-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                        <option value="">All Companies</option>
+                    </select>
                 </div>
             </div>
         </section>
@@ -142,6 +142,7 @@
                 <form id="register-form">
                     <input type="email" placeholder="Email" class="modal-input" required>
                     <input type="text" placeholder="Username" class="modal-input" required>
+                    <input type="date" id="register-birthdate" class="modal-input" required>
                     <input type="password" placeholder="Password" class="modal-input" required>
                     <button type="submit" class="login-submit">Create Account</button>
                     <button type="button" id="btn-to-login" class="login-submit" style="color: var(--based-on-theme); background: #252a3300; border: 1px solid var(--accent-blue);">Back to Login</button>
@@ -149,10 +150,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="admin-modal" class="modal-overlay">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h2>Admin Panel</h2>
+                <button id="close-admin-modal" class="close-modal">&times;</button>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Joined</th>
+                            <th>Adult</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin-modal-footer">
+                <small>Level 0: Full (+a, m, d) | Level 1: +a, d | Level 2: d only | Level 3: d only</small>
+            </div>
+            <div class="resize-handle">⤡</div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
-    <script src="user.js"></script>
     <script src="gameapi.js"></script>
     <script src="theme.js"></script>
     <script src="game_details.js"></script>
+    <script src="user.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
