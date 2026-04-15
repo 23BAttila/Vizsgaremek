@@ -18,9 +18,56 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("Connected to MongoDB Atlas! (｡◕‿◕｡)"))
-  .catch(err => console.error("Could not connect to MongoDB:", err));
+.connect(MONGO_URI)
+.then(() => console.log("Connected to MongoDB Atlas! (｡◕‿◕｡)"))
+.catch(err => console.error("Could not connect to MongoDB:", err));
+
+/*
+//i need for this connect to retry connection like this: 3 times every 10 seconds, then 3 times every 30 seconds, after this last three 60 seconds every time 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function delayForAttempt(attemptIndex) {
+  if (attemptIndex < 3) return 10_000;
+  if (attemptIndex < 6) return 30_000;
+  return 60_000;
+}
+//----------MONGO DB connection retry-------------
+async function connectWithRetries() {
+  let attempt = 0;
+
+  while (true) {
+    try {
+      await mongoose.connect(MONGO_URI, { });
+      console.log('Connected to MongoDB Atlas!');
+      return;
+    } catch (err) {
+      console.error(`MongoDB connect attempt #${attempt + 1} failed:`, err.message || err);
+      const delay = delayForAttempt(attempt);
+      console.log(`Retrying in ${delay / 1000}s... (New connection attempt number (${attempt + 1}))`);
+      await sleep(delay);
+      attempt += 1;
+    }
+  }
+}
+connectWithRetries().catch(err => {
+  console.error('Unexpected error in connect routine:', err);
+  process.exit(1);
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received: Closing mongoose connection');
+  await mongoose.disconnect();
+  process.exit(0);
+});
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received: Closing mongoose connection');
+  await mongoose.disconnect();
+  process.exit(0);
+});*/
+
+
 
 const userSchema = new mongoose.Schema({
   timeStamp: { type: Date, required: true, default: Date.now },
@@ -172,7 +219,7 @@ app.post("/api/popularity", async (req, res) => {
   }
 });
 
-// ---------- Games Endpoints (FIXED: added 'themes' to fields) ----------
+// ---------- Games Endpoints (INFO:JSTD-010-2) ----------
 app.get("/games/popular", async (req, res) => {
   try {
     if (!accessToken) await getAccessToken();
@@ -311,7 +358,7 @@ app.get("/companies", async (req, res) => {
   }
 });
 
-// ---------- Admin Endpoints (unchanged) ----------
+// ---------- Admin Endpoints-----------------
 async function requireAdmin(req, res, next) {
   const { requestedBy } = req.body;
   if (!requestedBy) {

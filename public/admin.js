@@ -16,9 +16,9 @@ let adminModal, adminTableBody, closeAdminBtn;
 let usernameFilter = "";
 let emailFilter = "";
 
-/**
- * Initialize admin modal
- */
+/*
+-------------------Initialize admin modal----------------------
+*/
 function initAdminModal() {
   adminModal = document.getElementById("admin-modal");
   adminTableBody = document.getElementById("admin-table-body");
@@ -39,14 +39,9 @@ function initAdminModal() {
     modalContent.style.resize = "both";
     modalContent.style.overflow = "auto";
   }
-
-  // Make table headers interactive
   setupFilterableHeaders();
 }
 
-/**
- * Setup click-to-filter on table headers
- */
 function setupFilterableHeaders() {
   const usernameHeader = document.querySelector(".admin-table th:first-child");
   const emailHeader = document.querySelector(".admin-table th:nth-child(3)");
@@ -64,11 +59,8 @@ function setupFilterableHeaders() {
   }
 }
 
-/**
- * Turn a header into a filter input
- */
+
 function makeHeaderFilterable(header, field) {
-  // If already an input, do nothing
   if (header.querySelector("input")) return;
 
   const originalText = header.textContent;
@@ -87,8 +79,6 @@ function makeHeaderFilterable(header, field) {
   input.style.border = "1px solid var(--gamecard-border)";
   input.style.borderRadius = "4px";
   input.style.fontSize = "12px";
-
-  // Set current filter value if any
   if (field === "username") input.value = usernameFilter;
   else if (field === "email") input.value = emailFilter;
 
@@ -107,7 +97,7 @@ function makeHeaderFilterable(header, field) {
     if (field === "username") usernameFilter = "";
     else if (field === "email") emailFilter = "";
     header.textContent = originalText;
-    setupFilterableHeaders(); // re-attach click listener
+    setupFilterableHeaders();
     applyFiltersAndRender();
   });
 
@@ -142,9 +132,8 @@ function applyFiltersAndRender() {
   renderAdminTable();
 }
 
-/**
- * Check admin status of current user
- */
+//------Check admin status of current user-------
+
 async function checkAdminStatus() {
   const username = localStorage.getItem("currentUser");
   if (!username) return false;
@@ -160,10 +149,7 @@ async function checkAdminStatus() {
     return false;
   }
 }
-
-/**
- * Open admin modal
- */
+//------------Opening admin modal----------------
 async function openAdminModal() {
   if (!await checkAdminStatus()) {
     showToast("Access denied. Admins only.", "error");
@@ -175,30 +161,24 @@ async function openAdminModal() {
   document.body.style.overflow = "hidden";
 }
 
-/**
- * Close admin modal
- */
+//----------Close admin modal-----------------
 function closeAdminModal() {
   adminModal.classList.remove("active");
   document.body.style.overflow = "auto";
   // Reset filters when closing
   usernameFilter = "";
   emailFilter = "";
-  // Restore headers
+  // Restoring headers
   const usernameHeader = document.querySelector(".admin-table th:first-child");
   const emailHeader = document.querySelector(".admin-table th:nth-child(3)");
   if (usernameHeader && !usernameHeader.querySelector("input")) {
-    // already restored
   } else {
     if (usernameHeader) usernameHeader.textContent = "Username";
     if (emailHeader) emailHeader.textContent = "Email";
     setupFilterableHeaders();
   }
 }
-
-/**
- * Load all users
- */
+//Loading all users
 async function loadUsers() {
   try {
     const response = await fetch("/api/admin/users");
@@ -212,9 +192,7 @@ async function loadUsers() {
   }
 }
 
-/**
- * Render user table with action buttons
- */
+//----------Render user table with action buttons--------
 function renderAdminTable() {
   const currentUser = localStorage.getItem("currentUser");
   adminTableBody.innerHTML = "";
@@ -227,7 +205,7 @@ function renderAdminTable() {
   filteredUsers.forEach(user => {
     const row = document.createElement("tr");
 
-    // Username
+    // Usernames
     const nameCell = document.createElement("td");
     nameCell.textContent = user.username;
     if (user.username === currentUser) {
@@ -235,17 +213,17 @@ function renderAdminTable() {
     }
     row.appendChild(nameCell);
 
-    // Role
+    // Roles
     const roleCell = document.createElement("td");
     roleCell.textContent = user.isAdmin ? `Admin Lvl ${user.adminLevel}` : "User";
     row.appendChild(roleCell);
 
-    // Email
+    // Emails
     const emailCell = document.createElement("td");
     emailCell.textContent = user.email || "—";
     row.appendChild(emailCell);
 
-    // Joined
+    // Joined/TimeStamps
     const joinedCell = document.createElement("td");
     joinedCell.textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "—";
     row.appendChild(joinedCell);
@@ -273,7 +251,7 @@ function renderAdminTable() {
     if (user.isAdmin && canManage && canAdjustLevel(user)) {
       const chooseBtn = document.createElement("button");
       chooseBtn.className = "admin-action-btn";
-      chooseBtn.textContent = "C";
+      chooseBtn.textContent = "c";
       chooseBtn.title = "Change admin level";
       chooseBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -307,11 +285,9 @@ function renderAdminTable() {
   });
 }
 
-// The rest of the functions (showLevelMenu, canAddAdmin, canManageUser, toggleAdmin, changeAdminLevel, promptForLevel, updateAdminStatus, modifyUsername, deleteUser) remain unchanged from the previous version. I'll include them here for completeness, but they are identical to the last provided `admin.js`.
 
-/**
- * Show floating menu for promote/demote options
- */
+//Show floating menu for promote/demote options
+
 function showLevelMenu(anchorButton, user) {
   const existingMenu = document.querySelector(".level-menu");
   if (existingMenu) existingMenu.remove();
@@ -461,7 +437,7 @@ function promptForLevel(message, defaultLevel) {
     const minLevel = (currentAdminLevel === 0) ? 0 : currentAdminLevel + 1;
     const maxLevel = 3;
     if (minLevel > maxLevel) {
-      showToast("You cannot create new admins (your level is too low)", "error");
+      showToast("You at your level cannot make anyone admin", "error");
       return resolve(null);
     }
 
@@ -476,7 +452,7 @@ function promptForLevel(message, defaultLevel) {
 
     const match = levelStr.match(/Level (\d+)/i);
     if (!match) {
-      showToast("Invalid format. Use 'Level X'", "error");
+      showToast("Invalid format. Use 'Level {numbers}' exactly", "error");
       return resolve(null);
     }
     const level = parseInt(match[1]);
@@ -590,7 +566,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
-
-// Global exports
 window.openAdminModal = openAdminModal;
 window.closeAdminModal = closeAdminModal;

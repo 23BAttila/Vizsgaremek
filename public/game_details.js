@@ -58,8 +58,6 @@ function openGameModal(id) {
             )
             .join("")
         : "";
-
-      // Inject the populated game details into the modal body
       body.innerHTML = `
                 <div class="game-modal-inner">
                     <div class="game-modal-top">
