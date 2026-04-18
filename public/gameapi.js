@@ -10,8 +10,8 @@ let allFetchedGames = [];
 let filteredGames = [];
 let addFilters = [];
 let blockFilters = [];
-let popularityValue = 50;
-let dateValue = 50;
+let popularityValue = 100;
+let dateValue = 100;
 let currentSearchQuery = "";
 
 let selectedPlatforms = [];
@@ -43,17 +43,19 @@ function getAdultParam() {
 }
 
 function updateSliderLabels() {
+  const currentYear = new Date().getFullYear();
   const dateGroup = dateSlider?.closest(".slider-group");
   const popGroup = popularitySlider?.closest(".slider-group");
 
   if (dateGroup) {
     const v = dateValue;
     let label = "Any date";
-    if (v < 20) label = "Very old (pre-2000)";
-    else if (v < 40) label = "Older (2000–2010)";
-    else if (v < 60) label = "Any date";
-    else if (v < 80) label = "Recent (2015+)";
-    else label = "New (2020+)";
+    if (v < 10) label = "Unknown";
+    else if (v < 20) label = "Very old (before 2000)";
+    else if (v < 40) label = "Older (2000 to 2010)";
+    else if (v < 60) label = `Recent (2015 to ${currentYear - 1})`;
+    else if (v < 90) label = `New (${currentYear})`;
+    else if (v === 100) label = "Any date";
 
     let el = dateGroup.querySelector(".slider-value-label");
     if (!el) {
@@ -66,12 +68,13 @@ function updateSliderLabels() {
 
   if (popGroup) {
     const v = popularityValue;
-    let label = "Any";
-    if (v < 20) label = "Very niche";
+    let label = "Unknown";
+    if (v < 10) label = "Unknown";
+    else if (v < 20) label = "Very niche";
     else if (v < 40) label = "Niche";
-    else if (v < 60) label = "Any";
-    else if (v < 80) label = "Popular";
-    else label = "Very popular";
+    else if (v < 60) label = "Less popular";
+    else if (v < 90) label = "Very popular";
+    else if (v === 100) label = "Any popularity";
 
     let el = popGroup.querySelector(".slider-value-label");
     if (!el) {
@@ -84,7 +87,7 @@ function updateSliderLabels() {
 }
 
 if (popularitySlider) {
-  popularitySlider.value = 50;
+  popularitySlider.value = 100;
   popularitySlider.addEventListener("input", () => {
     popularityValue = parseInt(popularitySlider.value);
     updateSliderLabels();
@@ -93,7 +96,7 @@ if (popularitySlider) {
 }
 
 if (dateSlider) {
-  dateSlider.value = 50;
+  dateSlider.value = 100;
   dateSlider.addEventListener("input", () => {
     dateValue = parseInt(dateSlider.value);
     updateSliderLabels();

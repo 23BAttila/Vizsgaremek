@@ -275,7 +275,8 @@ if (dropdownLogout) {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("username");
     localStorage.removeItem("isAdult");
-    location.reload();
+    // location.reload();
+    window.location.href = "/index.html";
   });
 }
 

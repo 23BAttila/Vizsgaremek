@@ -78,7 +78,7 @@ const userSchema = new mongoose.Schema({
   favorites: { type: Array, default: [] },
   isAdmin: { type: Boolean, default: false },
   adminLevel: { type: Number, default: null },
-  isAdult: { type: Boolean, default: false }
+  isAdult: { type: Boolean, default: false, required: true },
 });
 const User = mongoose.model("User", userSchema);
 
@@ -122,7 +122,7 @@ app.post("/api/register", async (req, res) => {
     res.json({ message: "Successful registration!" });
   } catch (err) {
     console.error("Registration Error:", err);
-    res.status(400).json({ error: "Database error or invalid data." });
+    res.status(400).json({ error: "Database error or invalid data."});
   }
 });
 
@@ -139,7 +139,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Wrong credentials!" });
     }
 
-    res.json({ username: user.username, isAdult: user.isAdult });
+    res.json({ username: user.username, isAdult: user.isAdult});
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Login failed!" });
@@ -465,6 +465,7 @@ app.post("/api/admin/rename", requireAdmin, async (req, res) => {
   }
 });
 
+
 app.post("/api/admin/delete", requireAdmin, async (req, res) => {
   try {
     const { username } = req.body;
@@ -508,3 +509,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+module.exports=app;

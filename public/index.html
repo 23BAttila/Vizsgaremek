@@ -64,28 +64,33 @@
                 <div class="input-group"><input type="text" placeholder="Adding filters..."></div>
                 <div class="input-group"><input type="text" placeholder="Blocking filters..."></div>
             </div>
-            <div class="sliders-container">
-                <div class="slider-group">
-                    <div class="slider-labels"><span>Older</span><span>Newer</span></div>
-                    <input type="range" class="custom-slider" id="date-slider">
+            <button id="betaFunctionsBtn" onclick="betaFunctions()">WIP Beta functions</button>
+            <div id="beta">
+                <br>
+                <br>
+                <div class="sliders-container">
+                    <div class="slider-group">
+                        <div class="slider-labels"><span>Older</span><span>Newer</span></div>
+                        <input type="range" class="custom-slider" id="date-slider">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
+                        <input type="range" class="custom-slider" id="popularity-slider">
+                    </div>
                 </div>
-                <div class="slider-group">
-                    <div class="slider-labels"><span>Niche</span><span>Popular</span></div>
-                    <input type="range" class="custom-slider" id="popularity-slider">
-                </div>
-            </div>
-            <div class="extra-features" style="display: flex; gap: 20px; margin-top: 20px;">
-                <div style="flex: 1;">
-                    <label style="color: var(--based-on-theme);">Platform:</label>
-                    <select id="platform-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
-                        <option value="">All Platforms</option>
-                    </select>
-                </div>
-                <div style="flex: 1;">
-                    <label style="color: var(--based-on-theme);">Developer/Publisher:</label>
-                    <select id="company-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
-                        <option value="">All Companies</option>
-                    </select>
+                <div class="extra-features" style="">
+                    <div style="flex: 1;">
+                        <label style="color: var(--based-on-theme);">Platform:</label>
+                        <select id="platform-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                            <option value="">All Platforms</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="color: var(--based-on-theme);">Developer/Publisher:</label>
+                        <select id="company-select" multiple size="3" style="width: 100%; background: var(--theme-based-bg); color: var(--based-on-theme); border: 1px solid #333; padding: 8px; border-radius: 8px;">
+                            <option value="">All Companies</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </section>
@@ -182,6 +187,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+    <script src="beta.js"></script>
     <script src="gameapi.js"></script>
     <script src="theme.js"></script>
     <script src="game_details.js"></script>
