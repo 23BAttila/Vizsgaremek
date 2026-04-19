@@ -830,7 +830,7 @@ header {
 }
 
 .modal-content { 
-    pointer-events: none;
+
     background: var(--panel-bg); 
     padding: 40px; 
     border-radius: 15px; 
